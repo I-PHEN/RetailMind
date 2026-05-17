@@ -59,22 +59,53 @@ without doing the math herself.
 - Config-driven multi-retailer support (`config/retailers.yaml`).
 
 ### Out of scope (roadmap)
-- Production WhatsApp sender (verified Meta Business / paid Twilio number) — MVP uses Twilio sandbox.
-- Self-serve onboarding UI (MVP configures retailers via YAML).
+- Production WhatsApp sender (verified Meta Business number + templates) — MVP uses the Twilio
+  sandbox; this is the #1 roadmap item and the gate for real users (see §9).
+- Self-serve WhatsApp-first onboarding (§5.1) — MVP uses concierge onboarding via YAML (§5.2).
 - Direct POS API integrations (Square, Loyverse, etc.).
 - Inventory write-back / purchase-order generation.
 - Multi-language localization (Swahili, Pidgin, French) — designed for, not shipped in MVP.
 - Forecasting / ML demand prediction.
 - Billing & multi-tenant auth.
 
-## 5. User experience
+## 5. Onboarding & user experience
 
-1. **Onboarding (operator-assisted):** retailer's sheet/CSV + WhatsApp number added to config;
-   they join the Twilio sandbox once (`join <code>`).
-2. **Morning digest:** "Good morning Amina ☀️ Yesterday you did KES 18,400 (up 12% on last
+**Guiding principle: no dashboard, ever.** The retailer never logs into a web app to "check
+their numbers." Onboarding is a one-time doorway that lives as close to WhatsApp as possible;
+after that, the entire product is the WhatsApp thread. A one-time setup link or setup
+conversation is *not* a dashboard — it is used once and never returned to.
+
+### 5.1 Onboarding — target model (WhatsApp-first, self-serve)
+
+1. Retailer taps a `wa.me` link or scans a QR (flyer, word of mouth) → opens a chat with the
+   RetailMind number.
+2. RetailMind replies conversationally: *"Hi 👋 I'm RetailMind. To get started I need to see
+   your sales. Do you keep them in a spreadsheet file, or Google Sheets?"*
+3. **Connect data — two branches:**
+   - **Spreadsheet file:** *"Just send me the file here."* They attach a CSV/Excel **inside
+     the WhatsApp chat** → ingested. Zero external auth; fully consistent with the thesis.
+     This is the primary self-serve path.
+   - **Google Sheets:** RetailMind sends one secure link → a single "Connect your Google
+     Sheet" page → **Google sign-in (OAuth)** → pick the sheet → done. (OAuth, *not*
+     share-with-service-account — non-technical owners will not reliably do the latter.)
+4. **Confirmation (trust moment):** RetailMind echoes what it understood —
+   *"Got it: 14 products, data Jan–May. First summary now, then every morning at 8am 👍?"*
+   This is where `schema.py`'s fuzzy column mapping gets a human sanity-check.
+5. Done. Identity = the sender's WhatsApp number (no separate account/login system needed).
+
+### 5.2 Onboarding — MVP/launch reality (concierge)
+
+For the hackathon and the first ~10 retailers, onboarding is **operator-assisted**: the
+founder adds the retailer to `config/retailers.yaml` (sheet/CSV + WhatsApp number + digest
+time); the retailer joins the Twilio sandbox once (`join <code>`). This is a deliberate
+"do things that don't scale" launch tactic, **not** the product onboarding — see §9.
+
+### 5.3 Ongoing experience (this is the whole product)
+
+1. **Morning digest:** "Good morning Amina ☀️ Yesterday you did KES 18,400 (up 12% on last
    Tuesday). Top seller: cooking oil. Heads up — sugar will run out in ~3 days at this pace."
-3. **Proactive alert:** sales drop / spike / imminent stockout detected → immediate WhatsApp.
-4. **Ask anything:** "how were sales last week vs the week before?" → grounded answer in seconds.
+2. **Proactive alert:** sales drop / spike / imminent stockout detected → immediate WhatsApp.
+3. **Ask anything:** "how were sales last week vs the week before?" → grounded answer in seconds.
 
 ## 6. Success metrics
 
@@ -111,9 +142,22 @@ See `CLAUDE.md` for the technical guide and `README.md` for setup + demo script.
 
 ## 9. Roadmap (post-MVP)
 
-1. Self-serve WhatsApp onboarding ("send me your sheet link").
-2. Production WhatsApp sender + multi-language (Swahili, Pidgin, French).
+Ordered by what unblocks real users first.
+
+1. **Production WhatsApp Business number** — *the key dependency for any real user.* The
+   Twilio sandbox `join <code>` step makes self-serve impossible. Requires a Meta Business
+   account, business verification (~2–10 business days of Meta review — calendar time, not
+   build time; can run in parallel with development), display-name approval, and
+   **pre-approved message templates** for business-initiated messages. Design implication:
+   proactive digests/alerts become templated messages (with variables); conversational
+   replies stay free-form within the 24-hour window. Code change is trivial (swap the
+   sender number) — this is a go-to-market gate, not an engineering one.
+2. **Self-serve WhatsApp-first onboarding** (§5.1): CSV-over-WhatsApp first (no auth), then
+   Google Sheets OAuth + the one-page connect link and the data-confirmation step.
 3. POS integrations (Loyverse, Square, Vend).
-4. Reorder automation: draft purchase orders, supplier reminders.
-5. Demand forecasting & promo recommendations.
-6. Multi-tenant SaaS: auth, billing, dashboard (optional companion to WhatsApp).
+4. Multi-language (Swahili, Pidgin, French) — the narrator is already isolated for this.
+5. Reorder automation: draft purchase orders, supplier reminders.
+6. Demand forecasting & promo recommendations.
+7. Multi-tenant ops: retailer registry in a DB (replacing `retailers.yaml`), billing, and an
+   **internal** admin view for the operator (not a retailer-facing dashboard — the
+   no-dashboard promise is to the retailer, not to ops).
