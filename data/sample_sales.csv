@@ -1,0 +1,901 @@
+Date,Item,Category,Qty,Unit Price,Unit Cost,Total
+2026-03-04,Cooking Oil 1L,Groceries,13,320,250,4160
+2026-03-04,Sugar 1kg,Groceries,25,160,120,4000
+2026-03-04,Maize Flour 2kg,Groceries,17,190,150,3230
+2026-03-04,Rice 2kg,Groceries,11,280,220,3080
+2026-03-04,Bread,Bakery,29,60,42,1740
+2026-03-04,Milk 500ml,Dairy,20,55,40,1100
+2026-03-04,Soda 500ml,Beverages,23,70,48,1610
+2026-03-04,Bottled Water 1L,Beverages,15,45,28,675
+2026-03-04,Tea Leaves 250g,Groceries,6,140,105,840
+2026-03-04,Soap Bar,Household,12,45,30,540
+2026-03-04,Detergent 500g,Household,6,180,135,1080
+2026-03-04,Matchbox,Household,24,10,6,240
+2026-03-05,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-03-05,Sugar 1kg,Groceries,26,160,120,4160
+2026-03-05,Maize Flour 2kg,Groceries,15,190,150,2850
+2026-03-05,Rice 2kg,Groceries,8,280,220,2240
+2026-03-05,Bread,Bakery,31,60,42,1860
+2026-03-05,Milk 500ml,Dairy,34,55,40,1870
+2026-03-05,Soda 500ml,Beverages,22,70,48,1540
+2026-03-05,Bottled Water 1L,Beverages,15,45,28,675
+2026-03-05,Tea Leaves 250g,Groceries,7,140,105,980
+2026-03-05,Soap Bar,Household,8,45,30,360
+2026-03-05,Detergent 500g,Household,5,180,135,900
+2026-03-05,Matchbox,Household,21,10,6,210
+2026-03-06,Cooking Oil 1L,Groceries,16,320,250,5120
+2026-03-06,Sugar 1kg,Groceries,25,160,120,4000
+2026-03-06,Maize Flour 2kg,Groceries,19,190,150,3610
+2026-03-06,Rice 2kg,Groceries,10,280,220,2800
+2026-03-06,Bread,Bakery,34,60,42,2040
+2026-03-06,Milk 500ml,Dairy,22,55,40,1210
+2026-03-06,Soda 500ml,Beverages,24,70,48,1680
+2026-03-06,Bottled Water 1L,Beverages,11,45,28,495
+2026-03-06,Tea Leaves 250g,Groceries,3,140,105,420
+2026-03-06,Soap Bar,Household,10,45,30,450
+2026-03-06,Detergent 500g,Household,5,180,135,900
+2026-03-06,Matchbox,Household,23,10,6,230
+2026-03-07,Cooking Oil 1L,Groceries,21,320,250,6720
+2026-03-07,Sugar 1kg,Groceries,27,160,120,4320
+2026-03-07,Maize Flour 2kg,Groceries,28,190,150,5320
+2026-03-07,Rice 2kg,Groceries,11,280,220,3080
+2026-03-07,Bread,Bakery,40,60,42,2400
+2026-03-07,Milk 500ml,Dairy,36,55,40,1980
+2026-03-07,Soda 500ml,Beverages,30,70,48,2100
+2026-03-07,Bottled Water 1L,Beverages,25,45,28,1125
+2026-03-07,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-03-07,Soap Bar,Household,17,45,30,765
+2026-03-07,Detergent 500g,Household,9,180,135,1620
+2026-03-07,Matchbox,Household,29,10,6,290
+2026-03-08,Cooking Oil 1L,Groceries,16,320,250,5120
+2026-03-08,Sugar 1kg,Groceries,30,160,120,4800
+2026-03-08,Maize Flour 2kg,Groceries,22,190,150,4180
+2026-03-08,Rice 2kg,Groceries,14,280,220,3920
+2026-03-08,Bread,Bakery,39,60,42,2340
+2026-03-08,Milk 500ml,Dairy,54,55,40,2970
+2026-03-08,Soda 500ml,Beverages,25,70,48,1750
+2026-03-08,Bottled Water 1L,Beverages,17,45,28,765
+2026-03-08,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-03-08,Soap Bar,Household,20,45,30,900
+2026-03-08,Detergent 500g,Household,8,180,135,1440
+2026-03-08,Matchbox,Household,31,10,6,310
+2026-03-09,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-03-09,Sugar 1kg,Groceries,25,160,120,4000
+2026-03-09,Maize Flour 2kg,Groceries,13,190,150,2470
+2026-03-09,Rice 2kg,Groceries,9,280,220,2520
+2026-03-09,Bread,Bakery,35,60,42,2100
+2026-03-09,Milk 500ml,Dairy,21,55,40,1155
+2026-03-09,Soda 500ml,Beverages,22,70,48,1540
+2026-03-09,Bottled Water 1L,Beverages,17,45,28,765
+2026-03-09,Tea Leaves 250g,Groceries,6,140,105,840
+2026-03-09,Soap Bar,Household,13,45,30,585
+2026-03-09,Detergent 500g,Household,6,180,135,1080
+2026-03-09,Matchbox,Household,28,10,6,280
+2026-03-10,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-03-10,Sugar 1kg,Groceries,23,160,120,3680
+2026-03-10,Maize Flour 2kg,Groceries,16,190,150,3040
+2026-03-10,Rice 2kg,Groceries,8,280,220,2240
+2026-03-10,Bread,Bakery,35,60,42,2100
+2026-03-10,Milk 500ml,Dairy,25,55,40,1375
+2026-03-10,Soda 500ml,Beverages,22,70,48,1540
+2026-03-10,Bottled Water 1L,Beverages,18,45,28,810
+2026-03-10,Tea Leaves 250g,Groceries,6,140,105,840
+2026-03-10,Soap Bar,Household,11,45,30,495
+2026-03-10,Detergent 500g,Household,4,180,135,720
+2026-03-10,Matchbox,Household,16,10,6,160
+2026-03-11,Cooking Oil 1L,Groceries,12,320,250,3840
+2026-03-11,Sugar 1kg,Groceries,28,160,120,4480
+2026-03-11,Maize Flour 2kg,Groceries,22,190,150,4180
+2026-03-11,Rice 2kg,Groceries,10,280,220,2800
+2026-03-11,Bread,Bakery,32,60,42,1920
+2026-03-11,Milk 500ml,Dairy,29,55,40,1595
+2026-03-11,Soda 500ml,Beverages,26,70,48,1820
+2026-03-11,Bottled Water 1L,Beverages,19,45,28,855
+2026-03-11,Tea Leaves 250g,Groceries,7,140,105,980
+2026-03-11,Soap Bar,Household,10,45,30,450
+2026-03-11,Detergent 500g,Household,7,180,135,1260
+2026-03-11,Matchbox,Household,21,10,6,210
+2026-03-12,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-03-12,Sugar 1kg,Groceries,26,160,120,4160
+2026-03-12,Maize Flour 2kg,Groceries,24,190,150,4560
+2026-03-12,Rice 2kg,Groceries,9,280,220,2520
+2026-03-12,Bread,Bakery,39,60,42,2340
+2026-03-12,Milk 500ml,Dairy,29,55,40,1595
+2026-03-12,Soda 500ml,Beverages,20,70,48,1400
+2026-03-12,Bottled Water 1L,Beverages,13,45,28,585
+2026-03-12,Tea Leaves 250g,Groceries,6,140,105,840
+2026-03-12,Soap Bar,Household,15,45,30,675
+2026-03-12,Detergent 500g,Household,7,180,135,1260
+2026-03-12,Matchbox,Household,23,10,6,230
+2026-03-13,Cooking Oil 1L,Groceries,8,320,250,2560
+2026-03-13,Sugar 1kg,Groceries,30,160,120,4800
+2026-03-13,Maize Flour 2kg,Groceries,20,190,150,3800
+2026-03-13,Rice 2kg,Groceries,9,280,220,2520
+2026-03-13,Bread,Bakery,27,60,42,1620
+2026-03-13,Milk 500ml,Dairy,28,55,40,1540
+2026-03-13,Soda 500ml,Beverages,29,70,48,2030
+2026-03-13,Bottled Water 1L,Beverages,13,45,28,585
+2026-03-13,Tea Leaves 250g,Groceries,6,140,105,840
+2026-03-13,Soap Bar,Household,15,45,30,675
+2026-03-13,Detergent 500g,Household,5,180,135,900
+2026-03-13,Matchbox,Household,19,10,6,190
+2026-03-14,Cooking Oil 1L,Groceries,19,320,250,6080
+2026-03-14,Sugar 1kg,Groceries,28,160,120,4480
+2026-03-14,Maize Flour 2kg,Groceries,26,190,150,4940
+2026-03-14,Rice 2kg,Groceries,10,280,220,2800
+2026-03-14,Bread,Bakery,48,60,42,2880
+2026-03-14,Milk 500ml,Dairy,39,55,40,2145
+2026-03-14,Soda 500ml,Beverages,43,70,48,3010
+2026-03-14,Bottled Water 1L,Beverages,23,45,28,1035
+2026-03-14,Tea Leaves 250g,Groceries,12,140,105,1680
+2026-03-14,Soap Bar,Household,12,45,30,540
+2026-03-14,Detergent 500g,Household,8,180,135,1440
+2026-03-14,Matchbox,Household,29,10,6,290
+2026-03-15,Cooking Oil 1L,Groceries,25,320,250,8000
+2026-03-15,Sugar 1kg,Groceries,25,160,120,4000
+2026-03-15,Maize Flour 2kg,Groceries,29,190,150,5510
+2026-03-15,Rice 2kg,Groceries,15,280,220,4200
+2026-03-15,Bread,Bakery,53,60,42,3180
+2026-03-15,Milk 500ml,Dairy,44,55,40,2420
+2026-03-15,Soda 500ml,Beverages,31,70,48,2170
+2026-03-15,Bottled Water 1L,Beverages,20,45,28,900
+2026-03-15,Tea Leaves 250g,Groceries,7,140,105,980
+2026-03-15,Soap Bar,Household,17,45,30,765
+2026-03-15,Detergent 500g,Household,8,180,135,1440
+2026-03-15,Matchbox,Household,38,10,6,380
+2026-03-16,Cooking Oil 1L,Groceries,12,320,250,3840
+2026-03-16,Sugar 1kg,Groceries,28,160,120,4480
+2026-03-16,Maize Flour 2kg,Groceries,13,190,150,2470
+2026-03-16,Rice 2kg,Groceries,9,280,220,2520
+2026-03-16,Bread,Bakery,32,60,42,1920
+2026-03-16,Milk 500ml,Dairy,33,55,40,1815
+2026-03-16,Soda 500ml,Beverages,28,70,48,1960
+2026-03-16,Bottled Water 1L,Beverages,16,45,28,720
+2026-03-16,Tea Leaves 250g,Groceries,5,140,105,700
+2026-03-16,Soap Bar,Household,13,45,30,585
+2026-03-16,Detergent 500g,Household,6,180,135,1080
+2026-03-16,Matchbox,Household,22,10,6,220
+2026-03-17,Cooking Oil 1L,Groceries,12,320,250,3840
+2026-03-17,Sugar 1kg,Groceries,32,160,120,5120
+2026-03-17,Maize Flour 2kg,Groceries,19,190,150,3610
+2026-03-17,Rice 2kg,Groceries,11,280,220,3080
+2026-03-17,Bread,Bakery,38,60,42,2280
+2026-03-17,Milk 500ml,Dairy,32,55,40,1760
+2026-03-17,Soda 500ml,Beverages,24,70,48,1680
+2026-03-17,Bottled Water 1L,Beverages,23,45,28,1035
+2026-03-17,Tea Leaves 250g,Groceries,7,140,105,980
+2026-03-17,Soap Bar,Household,11,45,30,495
+2026-03-17,Detergent 500g,Household,6,180,135,1080
+2026-03-17,Matchbox,Household,26,10,6,260
+2026-03-18,Cooking Oil 1L,Groceries,14,320,250,4480
+2026-03-18,Sugar 1kg,Groceries,29,160,120,4640
+2026-03-18,Maize Flour 2kg,Groceries,22,190,150,4180
+2026-03-18,Rice 2kg,Groceries,9,280,220,2520
+2026-03-18,Bread,Bakery,21,60,42,1260
+2026-03-18,Milk 500ml,Dairy,30,55,40,1650
+2026-03-18,Soda 500ml,Beverages,23,70,48,1610
+2026-03-18,Bottled Water 1L,Beverages,14,45,28,630
+2026-03-18,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-03-18,Soap Bar,Household,13,45,30,585
+2026-03-18,Detergent 500g,Household,5,180,135,900
+2026-03-18,Matchbox,Household,22,10,6,220
+2026-03-19,Cooking Oil 1L,Groceries,14,320,250,4480
+2026-03-19,Sugar 1kg,Groceries,20,160,120,3200
+2026-03-19,Maize Flour 2kg,Groceries,20,190,150,3800
+2026-03-19,Rice 2kg,Groceries,10,280,220,2800
+2026-03-19,Bread,Bakery,27,60,42,1620
+2026-03-19,Milk 500ml,Dairy,32,55,40,1760
+2026-03-19,Soda 500ml,Beverages,25,70,48,1750
+2026-03-19,Bottled Water 1L,Beverages,15,45,28,675
+2026-03-19,Tea Leaves 250g,Groceries,7,140,105,980
+2026-03-19,Soap Bar,Household,14,45,30,630
+2026-03-19,Detergent 500g,Household,5,180,135,900
+2026-03-19,Matchbox,Household,22,10,6,220
+2026-03-20,Cooking Oil 1L,Groceries,14,320,250,4480
+2026-03-20,Sugar 1kg,Groceries,38,160,120,6080
+2026-03-20,Maize Flour 2kg,Groceries,12,190,150,2280
+2026-03-20,Rice 2kg,Groceries,11,280,220,3080
+2026-03-20,Bread,Bakery,29,60,42,1740
+2026-03-20,Milk 500ml,Dairy,28,55,40,1540
+2026-03-20,Soda 500ml,Beverages,31,70,48,2170
+2026-03-20,Bottled Water 1L,Beverages,16,45,28,720
+2026-03-20,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-03-20,Soap Bar,Household,11,45,30,495
+2026-03-20,Detergent 500g,Household,6,180,135,1080
+2026-03-20,Matchbox,Household,19,10,6,190
+2026-03-21,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-03-21,Sugar 1kg,Groceries,37,160,120,5920
+2026-03-21,Maize Flour 2kg,Groceries,24,190,150,4560
+2026-03-21,Rice 2kg,Groceries,14,280,220,3920
+2026-03-21,Bread,Bakery,26,60,42,1560
+2026-03-21,Milk 500ml,Dairy,54,55,40,2970
+2026-03-21,Soda 500ml,Beverages,30,70,48,2100
+2026-03-21,Bottled Water 1L,Beverages,29,45,28,1305
+2026-03-21,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-03-21,Soap Bar,Household,18,45,30,810
+2026-03-21,Detergent 500g,Household,13,180,135,2340
+2026-03-21,Matchbox,Household,24,10,6,240
+2026-03-22,Cooking Oil 1L,Groceries,14,320,250,4480
+2026-03-22,Sugar 1kg,Groceries,33,160,120,5280
+2026-03-22,Maize Flour 2kg,Groceries,27,190,150,5130
+2026-03-22,Rice 2kg,Groceries,16,280,220,4480
+2026-03-22,Bread,Bakery,52,60,42,3120
+2026-03-22,Milk 500ml,Dairy,38,55,40,2090
+2026-03-22,Soda 500ml,Beverages,22,70,48,1540
+2026-03-22,Bottled Water 1L,Beverages,21,45,28,945
+2026-03-22,Tea Leaves 250g,Groceries,12,140,105,1680
+2026-03-22,Soap Bar,Household,18,45,30,810
+2026-03-22,Detergent 500g,Household,5,180,135,900
+2026-03-22,Matchbox,Household,28,10,6,280
+2026-03-23,Cooking Oil 1L,Groceries,18,320,250,5760
+2026-03-23,Sugar 1kg,Groceries,38,160,120,6080
+2026-03-23,Maize Flour 2kg,Groceries,21,190,150,3990
+2026-03-23,Rice 2kg,Groceries,11,280,220,3080
+2026-03-23,Bread,Bakery,24,60,42,1440
+2026-03-23,Milk 500ml,Dairy,25,55,40,1375
+2026-03-23,Soda 500ml,Beverages,23,70,48,1610
+2026-03-23,Bottled Water 1L,Beverages,18,45,28,810
+2026-03-23,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-03-23,Soap Bar,Household,11,45,30,495
+2026-03-23,Detergent 500g,Household,5,180,135,900
+2026-03-23,Matchbox,Household,18,10,6,180
+2026-03-24,Cooking Oil 1L,Groceries,11,320,250,3520
+2026-03-24,Sugar 1kg,Groceries,30,160,120,4800
+2026-03-24,Maize Flour 2kg,Groceries,11,190,150,2090
+2026-03-24,Rice 2kg,Groceries,10,280,220,2800
+2026-03-24,Bread,Bakery,34,60,42,2040
+2026-03-24,Milk 500ml,Dairy,38,55,40,2090
+2026-03-24,Soda 500ml,Beverages,23,70,48,1610
+2026-03-24,Bottled Water 1L,Beverages,20,45,28,900
+2026-03-24,Tea Leaves 250g,Groceries,6,140,105,840
+2026-03-24,Soap Bar,Household,11,45,30,495
+2026-03-24,Detergent 500g,Household,5,180,135,900
+2026-03-24,Matchbox,Household,27,10,6,270
+2026-03-25,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-03-25,Sugar 1kg,Groceries,30,160,120,4800
+2026-03-25,Maize Flour 2kg,Groceries,30,190,150,5700
+2026-03-25,Rice 2kg,Groceries,10,280,220,2800
+2026-03-25,Bread,Bakery,35,60,42,2100
+2026-03-25,Milk 500ml,Dairy,31,55,40,1705
+2026-03-25,Soda 500ml,Beverages,22,70,48,1540
+2026-03-25,Bottled Water 1L,Beverages,24,45,28,1080
+2026-03-25,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-03-25,Soap Bar,Household,9,45,30,405
+2026-03-25,Detergent 500g,Household,5,180,135,900
+2026-03-25,Matchbox,Household,23,10,6,230
+2026-03-26,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-03-26,Sugar 1kg,Groceries,21,160,120,3360
+2026-03-26,Maize Flour 2kg,Groceries,11,190,150,2090
+2026-03-26,Rice 2kg,Groceries,7,280,220,1960
+2026-03-26,Bread,Bakery,31,60,42,1860
+2026-03-26,Milk 500ml,Dairy,29,55,40,1595
+2026-03-26,Soda 500ml,Beverages,25,70,48,1750
+2026-03-26,Bottled Water 1L,Beverages,14,45,28,630
+2026-03-26,Tea Leaves 250g,Groceries,5,140,105,700
+2026-03-26,Soap Bar,Household,8,45,30,360
+2026-03-26,Detergent 500g,Household,6,180,135,1080
+2026-03-26,Matchbox,Household,22,10,6,220
+2026-03-27,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-03-27,Sugar 1kg,Groceries,31,160,120,4960
+2026-03-27,Maize Flour 2kg,Groceries,18,190,150,3420
+2026-03-27,Rice 2kg,Groceries,13,280,220,3640
+2026-03-27,Bread,Bakery,31,60,42,1860
+2026-03-27,Milk 500ml,Dairy,26,55,40,1430
+2026-03-27,Soda 500ml,Beverages,21,70,48,1470
+2026-03-27,Bottled Water 1L,Beverages,15,45,28,675
+2026-03-27,Tea Leaves 250g,Groceries,4,140,105,560
+2026-03-27,Soap Bar,Household,13,45,30,585
+2026-03-27,Detergent 500g,Household,6,180,135,1080
+2026-03-27,Matchbox,Household,20,10,6,200
+2026-03-28,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-03-28,Sugar 1kg,Groceries,40,160,120,6400
+2026-03-28,Maize Flour 2kg,Groceries,34,190,150,6460
+2026-03-28,Rice 2kg,Groceries,14,280,220,3920
+2026-03-28,Bread,Bakery,39,60,42,2340
+2026-03-28,Milk 500ml,Dairy,36,55,40,1980
+2026-03-28,Soda 500ml,Beverages,31,70,48,2170
+2026-03-28,Bottled Water 1L,Beverages,18,45,28,810
+2026-03-28,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-03-28,Soap Bar,Household,17,45,30,765
+2026-03-28,Detergent 500g,Household,11,180,135,1980
+2026-03-28,Matchbox,Household,34,10,6,340
+2026-03-29,Cooking Oil 1L,Groceries,24,320,250,7680
+2026-03-29,Sugar 1kg,Groceries,33,160,120,5280
+2026-03-29,Maize Flour 2kg,Groceries,29,190,150,5510
+2026-03-29,Rice 2kg,Groceries,11,280,220,3080
+2026-03-29,Bread,Bakery,46,60,42,2760
+2026-03-29,Milk 500ml,Dairy,44,55,40,2420
+2026-03-29,Soda 500ml,Beverages,27,70,48,1890
+2026-03-29,Bottled Water 1L,Beverages,31,45,28,1395
+2026-03-29,Tea Leaves 250g,Groceries,11,140,105,1540
+2026-03-29,Soap Bar,Household,11,45,30,495
+2026-03-29,Detergent 500g,Household,9,180,135,1620
+2026-03-29,Matchbox,Household,27,10,6,270
+2026-03-30,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-03-30,Sugar 1kg,Groceries,30,160,120,4800
+2026-03-30,Maize Flour 2kg,Groceries,20,190,150,3800
+2026-03-30,Rice 2kg,Groceries,6,280,220,1680
+2026-03-30,Bread,Bakery,25,60,42,1500
+2026-03-30,Milk 500ml,Dairy,34,55,40,1870
+2026-03-30,Soda 500ml,Beverages,29,70,48,2030
+2026-03-30,Bottled Water 1L,Beverages,23,45,28,1035
+2026-03-30,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-03-30,Soap Bar,Household,8,45,30,360
+2026-03-30,Detergent 500g,Household,7,180,135,1260
+2026-03-30,Matchbox,Household,14,10,6,140
+2026-03-31,Cooking Oil 1L,Groceries,19,320,250,6080
+2026-03-31,Sugar 1kg,Groceries,29,160,120,4640
+2026-03-31,Maize Flour 2kg,Groceries,15,190,150,2850
+2026-03-31,Rice 2kg,Groceries,14,280,220,3920
+2026-03-31,Bread,Bakery,36,60,42,2160
+2026-03-31,Milk 500ml,Dairy,20,55,40,1100
+2026-03-31,Soda 500ml,Beverages,25,70,48,1750
+2026-03-31,Bottled Water 1L,Beverages,15,45,28,675
+2026-03-31,Tea Leaves 250g,Groceries,7,140,105,980
+2026-03-31,Soap Bar,Household,11,45,30,495
+2026-03-31,Detergent 500g,Household,8,180,135,1440
+2026-03-31,Matchbox,Household,16,10,6,160
+2026-04-01,Cooking Oil 1L,Groceries,16,320,250,5120
+2026-04-01,Sugar 1kg,Groceries,37,160,120,5920
+2026-04-01,Maize Flour 2kg,Groceries,16,190,150,3040
+2026-04-01,Rice 2kg,Groceries,11,280,220,3080
+2026-04-01,Bread,Bakery,33,60,42,1980
+2026-04-01,Milk 500ml,Dairy,26,55,40,1430
+2026-04-01,Soda 500ml,Beverages,26,70,48,1820
+2026-04-01,Bottled Water 1L,Beverages,17,45,28,765
+2026-04-01,Tea Leaves 250g,Groceries,6,140,105,840
+2026-04-01,Soap Bar,Household,17,45,30,765
+2026-04-01,Detergent 500g,Household,7,180,135,1260
+2026-04-01,Matchbox,Household,21,10,6,210
+2026-04-02,Cooking Oil 1L,Groceries,13,320,250,4160
+2026-04-02,Sugar 1kg,Groceries,24,160,120,3840
+2026-04-02,Maize Flour 2kg,Groceries,24,190,150,4560
+2026-04-02,Rice 2kg,Groceries,10,280,220,2800
+2026-04-02,Bread,Bakery,35,60,42,2100
+2026-04-02,Milk 500ml,Dairy,29,55,40,1595
+2026-04-02,Soda 500ml,Beverages,26,70,48,1820
+2026-04-02,Bottled Water 1L,Beverages,17,45,28,765
+2026-04-02,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-04-02,Soap Bar,Household,12,45,30,540
+2026-04-02,Detergent 500g,Household,7,180,135,1260
+2026-04-02,Matchbox,Household,24,10,6,240
+2026-04-03,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-04-03,Sugar 1kg,Groceries,24,160,120,3840
+2026-04-03,Maize Flour 2kg,Groceries,16,190,150,3040
+2026-04-03,Rice 2kg,Groceries,9,280,220,2520
+2026-04-03,Bread,Bakery,27,60,42,1620
+2026-04-03,Milk 500ml,Dairy,35,55,40,1925
+2026-04-03,Soda 500ml,Beverages,23,70,48,1610
+2026-04-03,Bottled Water 1L,Beverages,22,45,28,990
+2026-04-03,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-04-03,Soap Bar,Household,13,45,30,585
+2026-04-03,Detergent 500g,Household,4,180,135,720
+2026-04-03,Matchbox,Household,20,10,6,200
+2026-04-04,Cooking Oil 1L,Groceries,20,320,250,6400
+2026-04-04,Sugar 1kg,Groceries,28,160,120,4480
+2026-04-04,Maize Flour 2kg,Groceries,25,190,150,4750
+2026-04-04,Rice 2kg,Groceries,15,280,220,4200
+2026-04-04,Bread,Bakery,40,60,42,2400
+2026-04-04,Milk 500ml,Dairy,35,55,40,1925
+2026-04-04,Soda 500ml,Beverages,28,70,48,1960
+2026-04-04,Bottled Water 1L,Beverages,31,45,28,1395
+2026-04-04,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-04-04,Soap Bar,Household,15,45,30,675
+2026-04-04,Detergent 500g,Household,8,180,135,1440
+2026-04-04,Matchbox,Household,34,10,6,340
+2026-04-05,Cooking Oil 1L,Groceries,18,320,250,5760
+2026-04-05,Sugar 1kg,Groceries,42,160,120,6720
+2026-04-05,Maize Flour 2kg,Groceries,30,190,150,5700
+2026-04-05,Rice 2kg,Groceries,16,280,220,4480
+2026-04-05,Bread,Bakery,56,60,42,3360
+2026-04-05,Milk 500ml,Dairy,37,55,40,2035
+2026-04-05,Soda 500ml,Beverages,39,70,48,2730
+2026-04-05,Bottled Water 1L,Beverages,20,45,28,900
+2026-04-05,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-04-05,Soap Bar,Household,21,45,30,945
+2026-04-05,Detergent 500g,Household,10,180,135,1800
+2026-04-05,Matchbox,Household,29,10,6,290
+2026-04-06,Cooking Oil 1L,Groceries,12,320,250,3840
+2026-04-06,Sugar 1kg,Groceries,31,160,120,4960
+2026-04-06,Maize Flour 2kg,Groceries,17,190,150,3230
+2026-04-06,Rice 2kg,Groceries,9,280,220,2520
+2026-04-06,Bread,Bakery,29,60,42,1740
+2026-04-06,Milk 500ml,Dairy,32,55,40,1760
+2026-04-06,Soda 500ml,Beverages,15,70,48,1050
+2026-04-06,Bottled Water 1L,Beverages,18,45,28,810
+2026-04-06,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-04-06,Soap Bar,Household,11,45,30,495
+2026-04-06,Detergent 500g,Household,7,180,135,1260
+2026-04-06,Matchbox,Household,24,10,6,240
+2026-04-07,Cooking Oil 1L,Groceries,13,320,250,4160
+2026-04-07,Sugar 1kg,Groceries,25,160,120,4000
+2026-04-07,Maize Flour 2kg,Groceries,22,190,150,4180
+2026-04-07,Rice 2kg,Groceries,8,280,220,2240
+2026-04-07,Bread,Bakery,31,60,42,1860
+2026-04-07,Milk 500ml,Dairy,27,55,40,1485
+2026-04-07,Soda 500ml,Beverages,24,70,48,1680
+2026-04-07,Bottled Water 1L,Beverages,18,45,28,810
+2026-04-07,Tea Leaves 250g,Groceries,7,140,105,980
+2026-04-07,Soap Bar,Household,16,45,30,720
+2026-04-07,Detergent 500g,Household,6,180,135,1080
+2026-04-07,Matchbox,Household,21,10,6,210
+2026-04-08,Cooking Oil 1L,Groceries,12,320,250,3840
+2026-04-08,Sugar 1kg,Groceries,32,160,120,5120
+2026-04-08,Maize Flour 2kg,Groceries,22,190,150,4180
+2026-04-08,Rice 2kg,Groceries,14,280,220,3920
+2026-04-08,Bread,Bakery,28,60,42,1680
+2026-04-08,Milk 500ml,Dairy,31,55,40,1705
+2026-04-08,Soda 500ml,Beverages,24,70,48,1680
+2026-04-08,Bottled Water 1L,Beverages,17,45,28,765
+2026-04-08,Tea Leaves 250g,Groceries,7,140,105,980
+2026-04-08,Soap Bar,Household,9,45,30,405
+2026-04-08,Detergent 500g,Household,7,180,135,1260
+2026-04-08,Matchbox,Household,24,10,6,240
+2026-04-09,Cooking Oil 1L,Groceries,18,320,250,5760
+2026-04-09,Sugar 1kg,Groceries,40,160,120,6400
+2026-04-09,Maize Flour 2kg,Groceries,19,190,150,3610
+2026-04-09,Rice 2kg,Groceries,11,280,220,3080
+2026-04-09,Bread,Bakery,33,60,42,1980
+2026-04-09,Milk 500ml,Dairy,42,55,40,2310
+2026-04-09,Soda 500ml,Beverages,16,70,48,1120
+2026-04-09,Bottled Water 1L,Beverages,19,45,28,855
+2026-04-09,Tea Leaves 250g,Groceries,5,140,105,700
+2026-04-09,Soap Bar,Household,7,45,30,315
+2026-04-09,Detergent 500g,Household,4,180,135,720
+2026-04-09,Matchbox,Household,16,10,6,160
+2026-04-10,Cooking Oil 1L,Groceries,18,320,250,5760
+2026-04-10,Sugar 1kg,Groceries,24,160,120,3840
+2026-04-10,Maize Flour 2kg,Groceries,19,190,150,3610
+2026-04-10,Rice 2kg,Groceries,8,280,220,2240
+2026-04-10,Bread,Bakery,37,60,42,2220
+2026-04-10,Milk 500ml,Dairy,25,55,40,1375
+2026-04-10,Soda 500ml,Beverages,30,70,48,2100
+2026-04-10,Bottled Water 1L,Beverages,14,45,28,630
+2026-04-10,Tea Leaves 250g,Groceries,6,140,105,840
+2026-04-10,Soap Bar,Household,13,45,30,585
+2026-04-10,Detergent 500g,Household,6,180,135,1080
+2026-04-10,Matchbox,Household,28,10,6,280
+2026-04-11,Cooking Oil 1L,Groceries,21,320,250,6720
+2026-04-11,Sugar 1kg,Groceries,30,160,120,4800
+2026-04-11,Maize Flour 2kg,Groceries,24,190,150,4560
+2026-04-11,Rice 2kg,Groceries,13,280,220,3640
+2026-04-11,Bread,Bakery,51,60,42,3060
+2026-04-11,Milk 500ml,Dairy,45,55,40,2475
+2026-04-11,Soda 500ml,Beverages,32,70,48,2240
+2026-04-11,Bottled Water 1L,Beverages,28,45,28,1260
+2026-04-11,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-04-11,Soap Bar,Household,17,45,30,765
+2026-04-11,Detergent 500g,Household,9,180,135,1620
+2026-04-11,Matchbox,Household,38,10,6,380
+2026-04-12,Cooking Oil 1L,Groceries,20,320,250,6400
+2026-04-12,Sugar 1kg,Groceries,37,160,120,5920
+2026-04-12,Maize Flour 2kg,Groceries,22,190,150,4180
+2026-04-12,Rice 2kg,Groceries,17,280,220,4760
+2026-04-12,Bread,Bakery,40,60,42,2400
+2026-04-12,Milk 500ml,Dairy,45,55,40,2475
+2026-04-12,Soda 500ml,Beverages,22,70,48,1540
+2026-04-12,Bottled Water 1L,Beverages,28,45,28,1260
+2026-04-12,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-04-12,Soap Bar,Household,15,45,30,675
+2026-04-12,Detergent 500g,Household,10,180,135,1800
+2026-04-12,Matchbox,Household,23,10,6,230
+2026-04-13,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-04-13,Sugar 1kg,Groceries,29,160,120,4640
+2026-04-13,Maize Flour 2kg,Groceries,16,190,150,3040
+2026-04-13,Rice 2kg,Groceries,14,280,220,3920
+2026-04-13,Bread,Bakery,43,60,42,2580
+2026-04-13,Milk 500ml,Dairy,20,55,40,1100
+2026-04-13,Soda 500ml,Beverages,18,70,48,1260
+2026-04-13,Bottled Water 1L,Beverages,20,45,28,900
+2026-04-13,Tea Leaves 250g,Groceries,6,140,105,840
+2026-04-13,Soap Bar,Household,12,45,30,540
+2026-04-13,Detergent 500g,Household,6,180,135,1080
+2026-04-13,Matchbox,Household,25,10,6,250
+2026-04-14,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-04-14,Sugar 1kg,Groceries,30,160,120,4800
+2026-04-14,Maize Flour 2kg,Groceries,17,190,150,3230
+2026-04-14,Rice 2kg,Groceries,14,280,220,3920
+2026-04-14,Bread,Bakery,31,60,42,1860
+2026-04-14,Milk 500ml,Dairy,33,55,40,1815
+2026-04-14,Soda 500ml,Beverages,22,70,48,1540
+2026-04-14,Bottled Water 1L,Beverages,18,45,28,810
+2026-04-14,Tea Leaves 250g,Groceries,7,140,105,980
+2026-04-14,Soap Bar,Household,13,45,30,585
+2026-04-14,Detergent 500g,Household,5,180,135,900
+2026-04-14,Matchbox,Household,25,10,6,250
+2026-04-15,Cooking Oil 1L,Groceries,20,320,250,6400
+2026-04-15,Sugar 1kg,Groceries,30,160,120,4800
+2026-04-15,Maize Flour 2kg,Groceries,23,190,150,4370
+2026-04-15,Rice 2kg,Groceries,13,280,220,3640
+2026-04-15,Bread,Bakery,39,60,42,2340
+2026-04-15,Milk 500ml,Dairy,33,55,40,1815
+2026-04-15,Soda 500ml,Beverages,26,70,48,1820
+2026-04-15,Bottled Water 1L,Beverages,21,45,28,945
+2026-04-15,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-04-15,Soap Bar,Household,11,45,30,495
+2026-04-15,Detergent 500g,Household,6,180,135,1080
+2026-04-15,Matchbox,Household,15,10,6,150
+2026-04-16,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-04-16,Sugar 1kg,Groceries,31,160,120,4960
+2026-04-16,Maize Flour 2kg,Groceries,25,190,150,4750
+2026-04-16,Rice 2kg,Groceries,11,280,220,3080
+2026-04-16,Bread,Bakery,40,60,42,2400
+2026-04-16,Milk 500ml,Dairy,32,55,40,1760
+2026-04-16,Soda 500ml,Beverages,20,70,48,1400
+2026-04-16,Bottled Water 1L,Beverages,13,45,28,585
+2026-04-16,Tea Leaves 250g,Groceries,6,140,105,840
+2026-04-16,Soap Bar,Household,10,45,30,450
+2026-04-16,Detergent 500g,Household,7,180,135,1260
+2026-04-16,Matchbox,Household,22,10,6,220
+2026-04-17,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-04-17,Sugar 1kg,Groceries,30,160,120,4800
+2026-04-17,Maize Flour 2kg,Groceries,24,190,150,4560
+2026-04-17,Rice 2kg,Groceries,13,280,220,3640
+2026-04-17,Bread,Bakery,30,60,42,1800
+2026-04-17,Milk 500ml,Dairy,30,55,40,1650
+2026-04-17,Soda 500ml,Beverages,22,70,48,1540
+2026-04-17,Bottled Water 1L,Beverages,12,45,28,540
+2026-04-17,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-04-17,Soap Bar,Household,16,45,30,720
+2026-04-17,Detergent 500g,Household,6,180,135,1080
+2026-04-17,Matchbox,Household,20,10,6,200
+2026-04-18,Cooking Oil 1L,Groceries,26,320,250,8320
+2026-04-18,Sugar 1kg,Groceries,23,160,120,3680
+2026-04-18,Maize Flour 2kg,Groceries,28,190,150,5320
+2026-04-18,Rice 2kg,Groceries,15,280,220,4200
+2026-04-18,Bread,Bakery,41,60,42,2460
+2026-04-18,Milk 500ml,Dairy,54,55,40,2970
+2026-04-18,Soda 500ml,Beverages,40,70,48,2800
+2026-04-18,Bottled Water 1L,Beverages,23,45,28,1035
+2026-04-18,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-04-18,Soap Bar,Household,17,45,30,765
+2026-04-18,Detergent 500g,Household,8,180,135,1440
+2026-04-18,Matchbox,Household,23,10,6,230
+2026-04-19,Cooking Oil 1L,Groceries,27,320,250,8640
+2026-04-19,Sugar 1kg,Groceries,47,160,120,7520
+2026-04-19,Maize Flour 2kg,Groceries,32,190,150,6080
+2026-04-19,Rice 2kg,Groceries,12,280,220,3360
+2026-04-19,Bread,Bakery,64,60,42,3840
+2026-04-19,Milk 500ml,Dairy,59,55,40,3245
+2026-04-19,Soda 500ml,Beverages,35,70,48,2450
+2026-04-19,Bottled Water 1L,Beverages,20,45,28,900
+2026-04-19,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-04-19,Soap Bar,Household,20,45,30,900
+2026-04-19,Detergent 500g,Household,7,180,135,1260
+2026-04-19,Matchbox,Household,30,10,6,300
+2026-04-20,Cooking Oil 1L,Groceries,19,320,250,6080
+2026-04-20,Sugar 1kg,Groceries,21,160,120,3360
+2026-04-20,Maize Flour 2kg,Groceries,28,190,150,5320
+2026-04-20,Rice 2kg,Groceries,14,280,220,3920
+2026-04-20,Bread,Bakery,26,60,42,1560
+2026-04-20,Milk 500ml,Dairy,24,55,40,1320
+2026-04-20,Soda 500ml,Beverages,24,70,48,1680
+2026-04-20,Bottled Water 1L,Beverages,15,45,28,675
+2026-04-20,Tea Leaves 250g,Groceries,7,140,105,980
+2026-04-20,Soap Bar,Household,7,45,30,315
+2026-04-20,Detergent 500g,Household,6,180,135,1080
+2026-04-20,Matchbox,Household,30,10,6,300
+2026-04-21,Cooking Oil 1L,Groceries,12,320,250,3840
+2026-04-21,Sugar 1kg,Groceries,28,160,120,4480
+2026-04-21,Maize Flour 2kg,Groceries,15,190,150,2850
+2026-04-21,Rice 2kg,Groceries,12,280,220,3360
+2026-04-21,Bread,Bakery,33,60,42,1980
+2026-04-21,Milk 500ml,Dairy,43,55,40,2365
+2026-04-21,Soda 500ml,Beverages,26,70,48,1820
+2026-04-21,Bottled Water 1L,Beverages,17,45,28,765
+2026-04-21,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-04-21,Soap Bar,Household,12,45,30,540
+2026-04-21,Detergent 500g,Household,5,180,135,900
+2026-04-21,Matchbox,Household,24,10,6,240
+2026-04-22,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-04-22,Sugar 1kg,Groceries,31,160,120,4960
+2026-04-22,Maize Flour 2kg,Groceries,22,190,150,4180
+2026-04-22,Rice 2kg,Groceries,10,280,220,2800
+2026-04-22,Bread,Bakery,37,60,42,2220
+2026-04-22,Milk 500ml,Dairy,42,55,40,2310
+2026-04-22,Soda 500ml,Beverages,20,70,48,1400
+2026-04-22,Bottled Water 1L,Beverages,24,45,28,1080
+2026-04-22,Tea Leaves 250g,Groceries,7,140,105,980
+2026-04-22,Soap Bar,Household,12,45,30,540
+2026-04-22,Detergent 500g,Household,10,180,135,1800
+2026-04-22,Matchbox,Household,23,10,6,230
+2026-04-23,Cooking Oil 1L,Groceries,20,320,250,6400
+2026-04-23,Sugar 1kg,Groceries,34,160,120,5440
+2026-04-23,Maize Flour 2kg,Groceries,14,190,150,2660
+2026-04-23,Rice 2kg,Groceries,11,280,220,3080
+2026-04-23,Bread,Bakery,31,60,42,1860
+2026-04-23,Milk 500ml,Dairy,24,55,40,1320
+2026-04-23,Soda 500ml,Beverages,17,70,48,1190
+2026-04-23,Bottled Water 1L,Beverages,19,45,28,855
+2026-04-23,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-04-23,Soap Bar,Household,14,45,30,630
+2026-04-23,Detergent 500g,Household,6,180,135,1080
+2026-04-23,Matchbox,Household,19,10,6,190
+2026-04-24,Cooking Oil 1L,Groceries,13,320,250,4160
+2026-04-24,Sugar 1kg,Groceries,27,160,120,4320
+2026-04-24,Maize Flour 2kg,Groceries,17,190,150,3230
+2026-04-24,Rice 2kg,Groceries,11,280,220,3080
+2026-04-24,Bread,Bakery,34,60,42,2040
+2026-04-24,Milk 500ml,Dairy,27,55,40,1485
+2026-04-24,Soda 500ml,Beverages,24,70,48,1680
+2026-04-24,Bottled Water 1L,Beverages,16,45,28,720
+2026-04-24,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-04-24,Soap Bar,Household,15,45,30,675
+2026-04-24,Detergent 500g,Household,7,180,135,1260
+2026-04-24,Matchbox,Household,25,10,6,250
+2026-04-25,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-04-25,Sugar 1kg,Groceries,38,160,120,6080
+2026-04-25,Maize Flour 2kg,Groceries,29,190,150,5510
+2026-04-25,Rice 2kg,Groceries,17,280,220,4760
+2026-04-25,Bread,Bakery,33,60,42,1980
+2026-04-25,Milk 500ml,Dairy,45,55,40,2475
+2026-04-25,Soda 500ml,Beverages,42,70,48,2940
+2026-04-25,Bottled Water 1L,Beverages,24,45,28,1080
+2026-04-25,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-04-25,Soap Bar,Household,20,45,30,900
+2026-04-25,Detergent 500g,Household,9,180,135,1620
+2026-04-25,Matchbox,Household,35,10,6,350
+2026-04-26,Cooking Oil 1L,Groceries,22,320,250,7040
+2026-04-26,Sugar 1kg,Groceries,42,160,120,6720
+2026-04-26,Maize Flour 2kg,Groceries,24,190,150,4560
+2026-04-26,Rice 2kg,Groceries,15,280,220,4200
+2026-04-26,Bread,Bakery,58,60,42,3480
+2026-04-26,Milk 500ml,Dairy,42,55,40,2310
+2026-04-26,Soda 500ml,Beverages,33,70,48,2310
+2026-04-26,Bottled Water 1L,Beverages,23,45,28,1035
+2026-04-26,Tea Leaves 250g,Groceries,12,140,105,1680
+2026-04-26,Soap Bar,Household,16,45,30,720
+2026-04-26,Detergent 500g,Household,11,180,135,1980
+2026-04-26,Matchbox,Household,26,10,6,260
+2026-04-27,Cooking Oil 1L,Groceries,13,320,250,4160
+2026-04-27,Sugar 1kg,Groceries,31,160,120,4960
+2026-04-27,Maize Flour 2kg,Groceries,21,190,150,3990
+2026-04-27,Rice 2kg,Groceries,12,280,220,3360
+2026-04-27,Bread,Bakery,42,60,42,2520
+2026-04-27,Milk 500ml,Dairy,30,55,40,1650
+2026-04-27,Soda 500ml,Beverages,28,70,48,1960
+2026-04-27,Bottled Water 1L,Beverages,15,45,28,675
+2026-04-27,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-04-27,Soap Bar,Household,15,45,30,675
+2026-04-27,Detergent 500g,Household,7,180,135,1260
+2026-04-27,Matchbox,Household,24,10,6,240
+2026-04-28,Cooking Oil 1L,Groceries,14,320,250,4480
+2026-04-28,Sugar 1kg,Groceries,28,160,120,4480
+2026-04-28,Maize Flour 2kg,Groceries,23,190,150,4370
+2026-04-28,Rice 2kg,Groceries,11,280,220,3080
+2026-04-28,Bread,Bakery,36,60,42,2160
+2026-04-28,Milk 500ml,Dairy,25,55,40,1375
+2026-04-28,Soda 500ml,Beverages,26,70,48,1820
+2026-04-28,Bottled Water 1L,Beverages,16,45,28,720
+2026-04-28,Tea Leaves 250g,Groceries,6,140,105,840
+2026-04-28,Soap Bar,Household,13,45,30,585
+2026-04-28,Detergent 500g,Household,4,180,135,720
+2026-04-28,Matchbox,Household,26,10,6,260
+2026-04-29,Cooking Oil 1L,Groceries,19,320,250,6080
+2026-04-29,Sugar 1kg,Groceries,30,160,120,4800
+2026-04-29,Maize Flour 2kg,Groceries,17,190,150,3230
+2026-04-29,Rice 2kg,Groceries,9,280,220,2520
+2026-04-29,Bread,Bakery,34,60,42,2040
+2026-04-29,Milk 500ml,Dairy,18,55,40,990
+2026-04-29,Soda 500ml,Beverages,26,70,48,1820
+2026-04-29,Bottled Water 1L,Beverages,21,45,28,945
+2026-04-29,Tea Leaves 250g,Groceries,7,140,105,980
+2026-04-29,Soap Bar,Household,12,45,30,540
+2026-04-29,Detergent 500g,Household,7,180,135,1260
+2026-04-29,Matchbox,Household,25,10,6,250
+2026-04-30,Cooking Oil 1L,Groceries,19,320,250,6080
+2026-04-30,Sugar 1kg,Groceries,31,160,120,4960
+2026-04-30,Maize Flour 2kg,Groceries,18,190,150,3420
+2026-04-30,Rice 2kg,Groceries,10,280,220,2800
+2026-04-30,Bread,Bakery,36,60,42,2160
+2026-04-30,Milk 500ml,Dairy,42,55,40,2310
+2026-04-30,Soda 500ml,Beverages,24,70,48,1680
+2026-04-30,Bottled Water 1L,Beverages,15,45,28,675
+2026-04-30,Tea Leaves 250g,Groceries,7,140,105,980
+2026-04-30,Soap Bar,Household,8,45,30,360
+2026-04-30,Detergent 500g,Household,7,180,135,1260
+2026-04-30,Matchbox,Household,17,10,6,170
+2026-05-01,Cooking Oil 1L,Groceries,12,320,250,3840
+2026-05-01,Sugar 1kg,Groceries,19,160,120,3040
+2026-05-01,Maize Flour 2kg,Groceries,17,190,150,3230
+2026-05-01,Rice 2kg,Groceries,13,280,220,3640
+2026-05-01,Bread,Bakery,27,60,42,1620
+2026-05-01,Milk 500ml,Dairy,22,55,40,1210
+2026-05-01,Soda 500ml,Beverages,27,70,48,1890
+2026-05-01,Bottled Water 1L,Beverages,17,45,28,765
+2026-05-01,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-05-01,Soap Bar,Household,16,45,30,720
+2026-05-01,Detergent 500g,Household,7,180,135,1260
+2026-05-01,Matchbox,Household,18,10,6,180
+2026-05-02,Cooking Oil 1L,Groceries,22,320,250,7040
+2026-05-02,Sugar 1kg,Groceries,45,160,120,7200
+2026-05-02,Maize Flour 2kg,Groceries,26,190,150,4940
+2026-05-02,Rice 2kg,Groceries,11,280,220,3080
+2026-05-02,Bread,Bakery,58,60,42,3480
+2026-05-02,Milk 500ml,Dairy,41,55,40,2255
+2026-05-02,Soda 500ml,Beverages,32,70,48,2240
+2026-05-02,Bottled Water 1L,Beverages,25,45,28,1125
+2026-05-02,Tea Leaves 250g,Groceries,13,140,105,1820
+2026-05-02,Soap Bar,Household,20,45,30,900
+2026-05-02,Detergent 500g,Household,9,180,135,1620
+2026-05-02,Matchbox,Household,36,10,6,360
+2026-05-03,Cooking Oil 1L,Groceries,31,320,250,9920
+2026-05-03,Sugar 1kg,Groceries,52,160,120,8320
+2026-05-03,Maize Flour 2kg,Groceries,32,190,150,6080
+2026-05-03,Rice 2kg,Groceries,12,280,220,3360
+2026-05-03,Bread,Bakery,81,60,42,4860
+2026-05-03,Milk 500ml,Dairy,35,55,40,1925
+2026-05-03,Soda 500ml,Beverages,33,70,48,2310
+2026-05-03,Bottled Water 1L,Beverages,22,45,28,990
+2026-05-03,Tea Leaves 250g,Groceries,14,140,105,1960
+2026-05-03,Soap Bar,Household,20,45,30,900
+2026-05-03,Detergent 500g,Household,7,180,135,1260
+2026-05-03,Matchbox,Household,33,10,6,330
+2026-05-04,Cooking Oil 1L,Groceries,18,320,250,5760
+2026-05-04,Sugar 1kg,Groceries,44,160,120,7040
+2026-05-04,Maize Flour 2kg,Groceries,16,190,150,3040
+2026-05-04,Rice 2kg,Groceries,10,280,220,2800
+2026-05-04,Bread,Bakery,33,60,42,1980
+2026-05-04,Milk 500ml,Dairy,33,55,40,1815
+2026-05-04,Soda 500ml,Beverages,23,70,48,1610
+2026-05-04,Bottled Water 1L,Beverages,21,45,28,945
+2026-05-04,Tea Leaves 250g,Groceries,6,140,105,840
+2026-05-04,Soap Bar,Household,9,45,30,405
+2026-05-04,Detergent 500g,Household,6,180,135,1080
+2026-05-04,Matchbox,Household,29,10,6,290
+2026-05-05,Cooking Oil 1L,Groceries,15,320,250,4800
+2026-05-05,Sugar 1kg,Groceries,66,160,120,10560
+2026-05-05,Maize Flour 2kg,Groceries,23,190,150,4370
+2026-05-05,Rice 2kg,Groceries,9,280,220,2520
+2026-05-05,Bread,Bakery,30,60,42,1800
+2026-05-05,Milk 500ml,Dairy,35,55,40,1925
+2026-05-05,Soda 500ml,Beverages,20,70,48,1400
+2026-05-05,Bottled Water 1L,Beverages,27,45,28,1215
+2026-05-05,Tea Leaves 250g,Groceries,6,140,105,840
+2026-05-05,Soap Bar,Household,16,45,30,720
+2026-05-05,Detergent 500g,Household,9,180,135,1620
+2026-05-05,Matchbox,Household,23,10,6,230
+2026-05-06,Cooking Oil 1L,Groceries,13,320,250,4160
+2026-05-06,Sugar 1kg,Groceries,44,160,120,7040
+2026-05-06,Maize Flour 2kg,Groceries,23,190,150,4370
+2026-05-06,Rice 2kg,Groceries,14,280,220,3920
+2026-05-06,Bread,Bakery,36,60,42,2160
+2026-05-06,Milk 500ml,Dairy,25,55,40,1375
+2026-05-06,Soda 500ml,Beverages,26,70,48,1820
+2026-05-06,Bottled Water 1L,Beverages,17,45,28,765
+2026-05-06,Tea Leaves 250g,Groceries,5,140,105,700
+2026-05-06,Soap Bar,Household,12,45,30,540
+2026-05-06,Detergent 500g,Household,5,180,135,900
+2026-05-06,Matchbox,Household,26,10,6,260
+2026-05-07,Cooking Oil 1L,Groceries,22,320,250,7040
+2026-05-07,Sugar 1kg,Groceries,63,160,120,10080
+2026-05-07,Maize Flour 2kg,Groceries,19,190,150,3610
+2026-05-07,Rice 2kg,Groceries,11,280,220,3080
+2026-05-07,Bread,Bakery,40,60,42,2400
+2026-05-07,Milk 500ml,Dairy,40,55,40,2200
+2026-05-07,Soda 500ml,Beverages,24,70,48,1680
+2026-05-07,Bottled Water 1L,Beverages,18,45,28,810
+2026-05-07,Tea Leaves 250g,Groceries,11,140,105,1540
+2026-05-07,Soap Bar,Household,14,45,30,630
+2026-05-07,Detergent 500g,Household,6,180,135,1080
+2026-05-07,Matchbox,Household,24,10,6,240
+2026-05-08,Cooking Oil 1L,Groceries,18,320,250,5760
+2026-05-08,Sugar 1kg,Groceries,38,160,120,6080
+2026-05-08,Maize Flour 2kg,Groceries,20,190,150,3800
+2026-05-08,Rice 2kg,Groceries,9,280,220,2520
+2026-05-08,Bread,Bakery,34,60,42,2040
+2026-05-08,Milk 500ml,Dairy,45,55,40,2475
+2026-05-08,Soda 500ml,Beverages,30,70,48,2100
+2026-05-08,Bottled Water 1L,Beverages,19,45,28,855
+2026-05-08,Tea Leaves 250g,Groceries,7,140,105,980
+2026-05-08,Soap Bar,Household,13,45,30,585
+2026-05-08,Detergent 500g,Household,8,180,135,1440
+2026-05-08,Matchbox,Household,21,10,6,210
+2026-05-09,Cooking Oil 1L,Groceries,29,320,250,9280
+2026-05-09,Sugar 1kg,Groceries,48,160,120,7680
+2026-05-09,Maize Flour 2kg,Groceries,28,190,150,5320
+2026-05-09,Rice 2kg,Groceries,21,280,220,5880
+2026-05-09,Bread,Bakery,31,60,42,1860
+2026-05-09,Milk 500ml,Dairy,55,55,40,3025
+2026-05-09,Soda 500ml,Beverages,24,70,48,1680
+2026-05-09,Bottled Water 1L,Beverages,25,45,28,1125
+2026-05-09,Tea Leaves 250g,Groceries,11,140,105,1540
+2026-05-09,Soap Bar,Household,22,45,30,990
+2026-05-09,Detergent 500g,Household,4,180,135,720
+2026-05-09,Matchbox,Household,21,10,6,210
+2026-05-10,Cooking Oil 1L,Groceries,20,320,250,6400
+2026-05-10,Sugar 1kg,Groceries,64,160,120,10240
+2026-05-10,Maize Flour 2kg,Groceries,24,190,150,4560
+2026-05-10,Rice 2kg,Groceries,15,280,220,4200
+2026-05-10,Bread,Bakery,38,60,42,2280
+2026-05-10,Milk 500ml,Dairy,42,55,40,2310
+2026-05-10,Soda 500ml,Beverages,30,70,48,2100
+2026-05-10,Bottled Water 1L,Beverages,27,45,28,1215
+2026-05-10,Tea Leaves 250g,Groceries,12,140,105,1680
+2026-05-10,Soap Bar,Household,24,45,30,1080
+2026-05-10,Detergent 500g,Household,8,180,135,1440
+2026-05-10,Matchbox,Household,31,10,6,310
+2026-05-11,Cooking Oil 1L,Groceries,17,320,250,5440
+2026-05-11,Sugar 1kg,Groceries,45,160,120,7200
+2026-05-11,Maize Flour 2kg,Groceries,21,190,150,3990
+2026-05-11,Rice 2kg,Groceries,8,280,220,2240
+2026-05-11,Bread,Bakery,39,60,42,2340
+2026-05-11,Milk 500ml,Dairy,28,55,40,1540
+2026-05-11,Soda 500ml,Beverages,22,70,48,1540
+2026-05-11,Bottled Water 1L,Beverages,14,45,28,630
+2026-05-11,Tea Leaves 250g,Groceries,10,140,105,1400
+2026-05-11,Soap Bar,Household,14,45,30,630
+2026-05-11,Detergent 500g,Household,8,180,135,1440
+2026-05-11,Matchbox,Household,25,10,6,250
+2026-05-12,Cooking Oil 1L,Groceries,11,320,250,3520
+2026-05-12,Sugar 1kg,Groceries,38,160,120,6080
+2026-05-12,Maize Flour 2kg,Groceries,25,190,150,4750
+2026-05-12,Rice 2kg,Groceries,10,280,220,2800
+2026-05-12,Bread,Bakery,29,60,42,1740
+2026-05-12,Milk 500ml,Dairy,33,55,40,1815
+2026-05-12,Soda 500ml,Beverages,26,70,48,1820
+2026-05-12,Bottled Water 1L,Beverages,16,45,28,720
+2026-05-12,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-05-12,Soap Bar,Household,13,45,30,585
+2026-05-12,Detergent 500g,Household,3,180,135,540
+2026-05-12,Matchbox,Household,26,10,6,260
+2026-05-13,Cooking Oil 1L,Groceries,14,320,250,4480
+2026-05-13,Sugar 1kg,Groceries,59,160,120,9440
+2026-05-13,Maize Flour 2kg,Groceries,17,190,150,3230
+2026-05-13,Rice 2kg,Groceries,8,280,220,2240
+2026-05-13,Bread,Bakery,44,60,42,2640
+2026-05-13,Milk 500ml,Dairy,24,55,40,1320
+2026-05-13,Soda 500ml,Beverages,24,70,48,1680
+2026-05-13,Bottled Water 1L,Beverages,21,45,28,945
+2026-05-13,Tea Leaves 250g,Groceries,8,140,105,1120
+2026-05-13,Soap Bar,Household,10,45,30,450
+2026-05-13,Detergent 500g,Household,7,180,135,1260
+2026-05-13,Matchbox,Household,23,10,6,230
+2026-05-14,Cooking Oil 1L,Groceries,21,320,250,6720
+2026-05-14,Sugar 1kg,Groceries,53,160,120,8480
+2026-05-14,Maize Flour 2kg,Groceries,34,190,150,6460
+2026-05-14,Rice 2kg,Groceries,8,280,220,2240
+2026-05-14,Bread,Bakery,36,60,42,2160
+2026-05-14,Milk 500ml,Dairy,27,55,40,1485
+2026-05-14,Soda 500ml,Beverages,32,70,48,2240
+2026-05-14,Bottled Water 1L,Beverages,22,45,28,990
+2026-05-14,Tea Leaves 250g,Groceries,9,140,105,1260
+2026-05-14,Soap Bar,Household,12,45,30,540
+2026-05-14,Detergent 500g,Household,6,180,135,1080
+2026-05-14,Matchbox,Household,15,10,6,150
+2026-05-15,Cooking Oil 1L,Groceries,43,320,250,13760
+2026-05-15,Sugar 1kg,Groceries,100,160,120,16000
+2026-05-15,Maize Flour 2kg,Groceries,40,190,150,7600
+2026-05-15,Rice 2kg,Groceries,27,280,220,7560
+2026-05-15,Bread,Bakery,80,60,42,4800
+2026-05-15,Milk 500ml,Dairy,77,55,40,4235
+2026-05-15,Soda 500ml,Beverages,36,70,48,2520
+2026-05-15,Bottled Water 1L,Beverages,32,45,28,1440
+2026-05-15,Tea Leaves 250g,Groceries,17,140,105,2380
+2026-05-15,Soap Bar,Household,30,45,30,1350
+2026-05-15,Detergent 500g,Household,16,180,135,2880
+2026-05-15,Matchbox,Household,38,10,6,380
+2026-05-16,Cooking Oil 1L,Groceries,45,320,250,14400
+2026-05-16,Sugar 1kg,Groceries,173,160,120,27680
+2026-05-16,Maize Flour 2kg,Groceries,64,190,150,12160
+2026-05-16,Rice 2kg,Groceries,36,280,220,10080
+2026-05-16,Bread,Bakery,95,60,42,5700
+2026-05-16,Milk 500ml,Dairy,101,55,40,5555
+2026-05-16,Soda 500ml,Beverages,92,70,48,6440
+2026-05-16,Bottled Water 1L,Beverages,52,45,28,2340
+2026-05-16,Tea Leaves 250g,Groceries,27,140,105,3780
+2026-05-16,Soap Bar,Household,32,45,30,1440
+2026-05-16,Detergent 500g,Household,21,180,135,3780
+2026-05-16,Matchbox,Household,74,10,6,740
+2026-05-17,Cooking Oil 1L,Groceries,38,320,250,12160
+2026-05-17,Sugar 1kg,Groceries,149,160,120,23840
+2026-05-17,Maize Flour 2kg,Groceries,50,190,150,9500
+2026-05-17,Rice 2kg,Groceries,27,280,220,7560
+2026-05-17,Bread,Bakery,95,60,42,5700
+2026-05-17,Milk 500ml,Dairy,120,55,40,6600
+2026-05-17,Soda 500ml,Beverages,74,70,48,5180
+2026-05-17,Bottled Water 1L,Beverages,59,45,28,2655
+2026-05-17,Tea Leaves 250g,Groceries,19,140,105,2660
+2026-05-17,Soap Bar,Household,38,45,30,1710
+2026-05-17,Detergent 500g,Household,15,180,135,2700
+2026-05-17,Matchbox,Household,57,10,6,570

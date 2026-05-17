@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Secrets & credentials
+.env
+*.env
+!.env.example
+service-account*.json
+google-credentials*.json
+credentials.json
+
+# Runtime data
+data/runtime/
+*.sqlite3
+.cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

@@ -1,0 +1,18 @@
+# RetailMind retailer registry (MVP: config-driven, no DB).
+# Each entry is one shop RetailMind watches and messages.
+
+retailers:
+  - id: demo
+    name: "Amina's Mini-Mart"
+    currency: KES                       # ISO code; narrator formats with this
+    whatsapp_to: "whatsapp:+254700000000"  # the retailer's WhatsApp number
+    timezone: "Africa/Nairobi"
+    digest_time: "08:00"                # local time for the daily digest
+    source:
+      type: csv                         # csv | google_sheet
+      path: "./data/sample_sales.csv"
+      # For google_sheet instead:
+      # type: google_sheet
+      # spreadsheet_id: "1AbC...xyz"
+      # worksheet: "Sales"
+    anomaly_poll_minutes: 5             # how often the anomaly watcher re-checks
