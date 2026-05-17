@@ -1,7 +1,6 @@
 """Turn an engine-computed insight bundle into a warm WhatsApp message.
 
-Hard rule: Claude narrates ONLY the numbers in the bundle. The system prompt is prompt-cached
-(it's static) so repeated digests are cheap and fast.
+Hard rule: the model narrates ONLY the numbers in the bundle.
 """
 from __future__ import annotations
 
@@ -9,9 +8,7 @@ import json
 import sys
 from typing import Any
 
-from anthropic import Anthropic
-
-from app.settings import get_settings
+from app.ai.llm import chat
 
 SYSTEM_PROMPT = """You are RetailMind, a sharp, warm business partner texting a shop owner on \
 WhatsApp. You are NOT a chatbot reading a report — you are the analyst they never had.
@@ -30,10 +27,6 @@ Voice & format:
 """
 
 
-def _client() -> Anthropic:
-    return Anthropic(api_key=get_settings().anthropic_api_key)
-
-
 def narrate(bundle: dict[str, Any], retailer: dict[str, Any] | None = None,
             mode: str = "digest") -> str:
     """mode='digest' → full morning summary. mode='alert' → just the urgent item(s)."""
@@ -48,24 +41,19 @@ def narrate(bundle: dict[str, Any], retailer: dict[str, Any] | None = None,
         "mode": mode,
         "bundle": bundle,
     }
-    settings = get_settings()
-    resp = _client().messages.create(
-        model=settings.anthropic_model,
+    resp = chat(
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user",
+             "content": f"{instruction}\n\nInsight bundle:\n{json.dumps(payload, default=str)}"},
+        ],
         max_tokens=600,
-        system=[{
-            "type": "text",
-            "text": SYSTEM_PROMPT,
-            "cache_control": {"type": "ephemeral"},
-        }],
-        messages=[{
-            "role": "user",
-            "content": f"{instruction}\n\nInsight bundle:\n{json.dumps(payload, default=str)}",
-        }],
     )
-    return "".join(b.text for b in resp.content if b.type == "text").strip()
+    return (resp.choices[0].message.content or "").strip()
 
 
 if __name__ == "__main__":  # python -m app.ai.narrator <csv>
+    sys.stdout.reconfigure(encoding="utf-8")  # WhatsApp text has emojis; Windows console is cp1252
     from app.analytics.engine import build_bundle
     from app.connectors.csv_loader import load_csv
 

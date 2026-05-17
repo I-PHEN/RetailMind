@@ -9,9 +9,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    # Anthropic
-    anthropic_api_key: str = ""
-    anthropic_model: str = "claude-sonnet-4-6"
+    # LLM (OpenAI-compatible; OpenRouter by default)
+    llm_api_key: str = ""
+    llm_base_url: str = "https://openrouter.ai/api/v1"
+    llm_model: str = "deepseek/deepseek-chat-v3-0324:free"
 
     # Twilio
     twilio_account_sid: str = ""

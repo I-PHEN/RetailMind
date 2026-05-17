@@ -1,21 +1,21 @@
 """Two-way conversational AI.
 
-A retailer replies on WhatsApp; Claude answers using tools that read the SAME analytics
-engine / canonical DataFrame. Claude never computes numbers itself — it calls a tool and
-relays the result. Short in-memory history keeps follow-ups coherent.
+A retailer replies on WhatsApp; the model answers using tools that read the SAME analytics
+engine / canonical DataFrame. It never computes numbers itself — it calls a tool and relays
+the result. Short in-memory history keeps follow-ups coherent.
 """
 from __future__ import annotations
 
+import json
 from collections import defaultdict, deque
 from datetime import timedelta
 from typing import Any
 
 import pandas as pd
-from anthropic import Anthropic
 
+from app.ai.llm import chat
 from app.analytics.engine import build_bundle
 from app.connectors import load_source
-from app.settings import get_settings
 
 SYSTEM_PROMPT = """You are RetailMind, a warm, sharp business partner the shop owner chats \
 with on WhatsApp. Answer questions about THEIR shop using the tools provided.
@@ -26,39 +26,34 @@ invent figures. If a tool can't answer, say so plainly and suggest what you can 
 Keep replies short and WhatsApp-friendly: plain language, a little warmth, money with the \
 currency code, action-first when something needs attention. No markdown headers, no essays."""
 
+
+def _fn(name: str, description: str, properties: dict, required: list[str] | None = None):
+    return {
+        "type": "function",
+        "function": {
+            "name": name,
+            "description": description,
+            "parameters": {
+                "type": "object",
+                "properties": properties,
+                "required": required or [],
+            },
+        },
+    }
+
+
 TOOLS = [
-    {
-        "name": "sales_summary",
-        "description": "Total revenue and units for a period.",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "period": {
-                    "type": "string",
-                    "enum": ["yesterday", "last_7_days", "prev_7_days",
-                             "last_30_days", "this_month", "all"],
-                }
-            },
-            "required": ["period"],
-        },
-    },
-    {
-        "name": "top_products",
-        "description": "Best (or slowest) selling products over the last N days.",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "days": {"type": "integer", "default": 14},
-                "limit": {"type": "integer", "default": 5},
-                "order": {"type": "string", "enum": ["top", "slow"], "default": "top"},
-            },
-        },
-    },
-    {
-        "name": "current_insights",
-        "description": "The current proactive insight bundle (trends, anomalies, reorder).",
-        "input_schema": {"type": "object", "properties": {}},
-    },
+    _fn("sales_summary", "Total revenue and units for a period.",
+        {"period": {"type": "string",
+                     "enum": ["yesterday", "last_7_days", "prev_7_days",
+                              "last_30_days", "this_month", "all"]}},
+        ["period"]),
+    _fn("top_products", "Best (or slowest) selling products over the last N days.",
+        {"days": {"type": "integer"},
+         "limit": {"type": "integer"},
+         "order": {"type": "string", "enum": ["top", "slow"]}}),
+    _fn("current_insights",
+        "The current proactive insight bundle (trends, anomalies, reorder).", {}),
 ]
 
 _history: dict[str, deque] = defaultdict(lambda: deque(maxlen=8))
@@ -116,39 +111,36 @@ def _run_tool(name: str, args: dict, df: pd.DataFrame, currency: str) -> dict[st
 
 def answer(retailer: dict[str, Any], sender: str, text: str) -> str:
     """Answer one inbound WhatsApp message for `retailer` from `sender`."""
-    settings = get_settings()
-    client = Anthropic(api_key=settings.anthropic_api_key)
     df = load_source(retailer["source"])
     currency = retailer.get("currency", "")
 
     hist = _history[sender]
-    messages: list[dict[str, Any]] = list(hist) + [{"role": "user", "content": text}]
+    messages: list[dict[str, Any]] = (
+        [{"role": "system", "content": SYSTEM_PROMPT}]
+        + list(hist)
+        + [{"role": "user", "content": text}]
+    )
 
     for _ in range(5):  # tool-use loop
-        resp = client.messages.create(
-            model=settings.anthropic_model,
-            max_tokens=700,
-            system=[{"type": "text", "text": SYSTEM_PROMPT,
-                     "cache_control": {"type": "ephemeral"}}],
-            tools=TOOLS,
-            messages=messages,
-        )
-        messages.append({"role": "assistant", "content": resp.content})
-        if resp.stop_reason != "tool_use":
-            reply = "".join(b.text for b in resp.content if b.type == "text").strip()
+        resp = chat(messages, tools=TOOLS, max_tokens=700)
+        msg = resp.choices[0].message
+        if not getattr(msg, "tool_calls", None):
+            reply = (msg.content or "").strip()
             hist.append({"role": "user", "content": text})
             hist.append({"role": "assistant", "content": reply})
             return reply or "Sorry, I couldn't put that together — try rephrasing?"
 
-        results = []
-        for block in resp.content:
-            if block.type == "tool_use":
-                out = _run_tool(block.name, block.input or {}, df, currency)
-                results.append({
-                    "type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": str(out),
-                })
-        messages.append({"role": "user", "content": results})
+        messages.append(msg.model_dump(exclude_none=True))
+        for tc in msg.tool_calls:
+            try:
+                args = json.loads(tc.function.arguments or "{}")
+            except json.JSONDecodeError:
+                args = {}
+            out = _run_tool(tc.function.name, args, df, currency)
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tc.id,
+                "content": json.dumps(out, default=str),
+            })
 
     return "That took a few too many steps — could you ask it a simpler way?"
