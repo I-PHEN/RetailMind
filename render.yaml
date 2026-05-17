@@ -1,0 +1,24 @@
+# Render Blueprint. Create a Blueprint from this repo, then set the secret env vars
+# (ANTHROPIC_API_KEY, TWILIO_*) in the Render dashboard. Point the Twilio sandbox
+# inbound webhook at https://<service>.onrender.com/webhook/whatsapp
+services:
+  - type: web
+    name: retailmind
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-4-6
+      - key: RETAILMIND_CONFIG
+        value: ./config/retailers.yaml
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_WHATSAPP_FROM
+        sync: false
