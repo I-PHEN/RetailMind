@@ -38,37 +38,46 @@ def _daily_digest(retailer: dict) -> None:
         log.exception("daily digest failed for %s", rid)
 
 
-def _anomaly_poll(retailer: dict) -> None:
+def run_poll(retailer: dict) -> dict:
+    """One intelligent-alert cycle. Returns what happened (used by the demo endpoint)."""
     rid = retailer["id"]
+    bundle = build_for(retailer)
+    state = st.load_state()
+
+    candidates = select_candidates(bundle, retailer, state)
+    if not candidates:
+        return {"retailer": rid, "outcome": "no_candidates", "sent": []}
+
+    dg = st.last_digest(state, rid)
+    verdict = judge(candidates, (dg or {}).get("names", []), retailer)
+    send_names = set(verdict["send"])
+    if not send_names:
+        return {"retailer": rid, "outcome": "judge_suppressed_all",
+                "candidates": [i["name"] for i, _ in candidates],
+                "dropped": verdict.get("dropped", []), "sent": []}
+
+    sent = [ins for ins, _ in candidates if ins["name"] in send_names]
+    message = narrate_alert(sent, verdict.get("headline", ""), retailer)
+    sid = send_whatsapp(retailer["whatsapp_to"], message)
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    for ins in sent:
+        st.set_insight_state(state, rid, ins["name"],
+                             ins["severity"], alert_key(ins), now_iso)
+    st.save_state(state)
+    log.info("ALERT sent to %s (sid=%s) insights=%s",
+             rid, sid, [i["name"] for i in sent])
+    return {"retailer": rid, "outcome": "alert_sent", "twilio_sid": sid,
+            "headline": verdict.get("headline", ""),
+            "sent": [i["name"] for i in sent], "message": message}
+
+
+def _anomaly_poll(retailer: dict) -> None:
     try:
-        bundle = build_for(retailer)
-        state = st.load_state()
-
-        candidates = select_candidates(bundle, retailer, state)
-        if not candidates:
-            log.debug("poll %s — nothing new/worsened", rid)
-            return
-
-        dg = st.last_digest(state, rid)
-        verdict = judge(candidates, (dg or {}).get("names", []), retailer)
-        send_names = set(verdict["send"])
-        if not send_names:
-            log.info("poll %s — judge suppressed all candidates", rid)
-            return
-
-        sent = [ins for ins, _ in candidates if ins["name"] in send_names]
-        message = narrate_alert(sent, verdict.get("headline", ""), retailer)
-        sid = send_whatsapp(retailer["whatsapp_to"], message)
-
-        now_iso = datetime.now(timezone.utc).isoformat()
-        for ins in sent:
-            st.set_insight_state(state, rid, ins["name"],
-                                 ins["severity"], alert_key(ins), now_iso)
-        st.save_state(state)
-        log.info("ALERT sent to %s (sid=%s) insights=%s",
-                 rid, sid, [i["name"] for i in sent])
+        result = run_poll(retailer)
+        log.info("poll %s — %s", retailer["id"], result["outcome"])
     except Exception:
-        log.exception("anomaly poll failed for %s", rid)
+        log.exception("anomaly poll failed for %s", retailer.get("id"))
 
 
 def start_scheduler() -> BackgroundScheduler:

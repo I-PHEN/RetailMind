@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException
 from app.messaging.webhook import router as webhook_router
 from app.pipeline import run_digest
 from app.retailers import all_retailers, get_retailer
-from app.scheduler.jobs import start_scheduler
+from app.scheduler.jobs import run_poll, start_scheduler
 
 logging.basicConfig(level=logging.INFO,
                      format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -48,4 +48,22 @@ def trigger(retailer_id: str, mode: str = "digest", send: bool = True) -> dict:
         return run_digest(retailer, mode=mode, send=send)
     except Exception as exc:
         log.exception("trigger failed for %s", retailer_id)
+        raise HTTPException(500, str(exc))
+
+
+@app.post("/poll/{retailer_id}")
+def poll(retailer_id: str) -> dict:
+    """Run one intelligent-alert cycle on demand (the autonomous-alert demo button).
+
+    Same logic the scheduler runs every few minutes: engine → policy → LLM judge →
+    alert voice. Returns the outcome: no_candidates / judge_suppressed_all / alert_sent.
+    Call it twice with no data change to show it alerts once, then stays quiet.
+    """
+    retailer = get_retailer(retailer_id)
+    if not retailer:
+        raise HTTPException(404, f"unknown retailer {retailer_id!r}")
+    try:
+        return run_poll(retailer)
+    except Exception as exc:
+        log.exception("poll failed for %s", retailer_id)
         raise HTTPException(500, str(exc))
