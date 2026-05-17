@@ -30,6 +30,46 @@ are ordered first). State what it means, then the concrete action.
 """
 
 
+ALERT_SYSTEM_PROMPT = """You are RetailMind sending an UNSOLICITED WhatsApp alert — you are \
+interrupting a busy shop owner, so it must be worth it and instantly clear.
+
+ABSOLUTE RULE: Use ONLY numbers present in the provided JSON. Never invent or change a figure.
+
+How to write the alert:
+- First line: the headline given to you (or, if empty, the single most urgent finding) as a \
+short punchy line. Optionally one leading ⚠️ if it's a genuine warning.
+- Then, per item: what changed → why it matters now → the one action to take. One line each.
+- 2–4 lines total. No greeting, no preamble, no "hope you're well", no sign-off, no recap of \
+routine numbers. This is an interruption, not a report.
+- Plain words, no jargon ("a sharp drop", never "z-score").
+- Money: exact currency code from the data, e.g. "KES 80,835". Never abbreviate or drop it.
+"""
+
+
+def narrate_alert(sent_insights: list[dict[str, Any]], headline: str,
+                   retailer: dict[str, Any] | None = None) -> str:
+    """LLM #2 — phrase the rule+judge-approved alert in the interruption voice."""
+    retailer = retailer or {}
+    payload = {
+        "shop_name": retailer.get("name", ""),
+        "currency": retailer.get("currency", ""),
+        "headline": headline,
+        "alerts": [
+            {"title": i["title"], "finding": i["finding"], "metrics": i.get("metrics", {})}
+            for i in sent_insights
+        ],
+    }
+    resp = chat(
+        messages=[
+            {"role": "system", "content": ALERT_SYSTEM_PROMPT},
+            {"role": "user",
+             "content": f"Write the alert.\n\n{json.dumps(payload, default=str)}"},
+        ],
+        max_tokens=350,
+    )
+    return to_whatsapp(resp.choices[0].message.content or "")
+
+
 def narrate(bundle: dict[str, Any], retailer: dict[str, Any] | None = None,
             mode: str = "digest") -> str:
     """mode='digest' → full morning summary. mode='alert' → just the urgent item(s)."""

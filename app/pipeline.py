@@ -30,4 +30,5 @@ def run_digest(retailer: dict[str, Any], mode: str = "digest", send: bool = True
         "twilio_sid": sid,
         "has_high_severity": bundle["has_high_severity"],
         "insight_count": len(bundle["insights"]),
+        "insight_names": [i["name"] for i in bundle["insights"]],
     }

@@ -25,6 +25,11 @@ analyst, not a cheerleader.
 ABSOLUTE RULE: every number you state must come from a tool result. Never estimate or \
 invent figures. If a tool can't answer, say so plainly and suggest what you can tell them.
 
+STOCK QUESTIONS: "what's about to run out / low on stock / needs reordering" ARE answerable \
+— call `reorder_risk`. RetailMind estimates this from sales velocity, not live stock counts, \
+so answer with the product(s) and ~days until reorder, and note it's a sales-pace estimate. \
+Only say stock data is unavailable if `reorder_risk` returns no items.
+
 How to reply:
 - Answer the question directly first, with the relevant numbers and currency code.
 - Add at most one sharp, useful takeaway or recommended action — only if it adds insight.
@@ -60,8 +65,12 @@ TOOLS = [
         {"days": {"type": "integer"},
          "limit": {"type": "integer"},
          "order": {"type": "string", "enum": ["top", "slow"]}}),
+    _fn("reorder_risk",
+        "Products at risk of running out soon, estimated from sales velocity "
+        "(recent vs baseline daily units and approx days until reorder).", {}),
     _fn("current_insights",
-        "The current proactive insight bundle (trends, anomalies, reorder).", {}),
+        "Full proactive insight bundle: revenue trend, week-over-week, anomalies/spikes, "
+        "best/worst days, top & slow sellers, and reorder/stock-risk by sales velocity.", {}),
 ]
 
 _history: dict[str, deque] = defaultdict(lambda: deque(maxlen=8))
@@ -107,6 +116,15 @@ def _run_tool(name: str, args: dict, df: pd.DataFrame, currency: str) -> dict[st
                 for p, r in rows.iterrows()
             ],
             "currency": currency,
+        }
+    if name == "reorder_risk":
+        bundle = build_bundle(df, {"currency": currency})
+        ls = next((i for i in bundle["insights"] if i["name"] == "low_stock"), None)
+        if not ls or not ls["metrics"].get("items"):
+            return {"items": [], "note": "No products are running low at the current sales pace."}
+        return {
+            "method": "sales-velocity estimate (not live stock counts)",
+            "items": ls["metrics"]["items"],
         }
     if name == "current_insights":
         bundle = build_bundle(df, {"currency": currency})

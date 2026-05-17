@@ -23,6 +23,9 @@ data/runtime/
 cloudflared.exe
 models.json
 trigger_out.json
+cf.out
+cf.log
+uv.log
 
 # OS / editor
 .DS_Store
