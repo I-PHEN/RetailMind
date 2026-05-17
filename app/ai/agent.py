@@ -14,17 +14,25 @@ from typing import Any
 import pandas as pd
 
 from app.ai.llm import chat
+from app.ai.textfmt import to_whatsapp
 from app.analytics.engine import build_bundle
 from app.connectors import load_source
 
-SYSTEM_PROMPT = """You are RetailMind, a warm, sharp business partner the shop owner chats \
-with on WhatsApp. Answer questions about THEIR shop using the tools provided.
+SYSTEM_PROMPT = """You are RetailMind, an expert retail analyst the shop owner messages on \
+WhatsApp. Answer questions about THEIR shop using the tools provided. Think like a sharp \
+analyst, not a cheerleader.
 
 ABSOLUTE RULE: every number you state must come from a tool result. Never estimate or \
 invent figures. If a tool can't answer, say so plainly and suggest what you can tell them.
 
-Keep replies short and WhatsApp-friendly: plain language, a little warmth, money with the \
-currency code, action-first when something needs attention. No markdown headers, no essays."""
+How to reply:
+- Answer the question directly first, with the relevant numbers and currency code.
+- Add at most one sharp, useful takeaway or recommended action — only if it adds insight.
+- Be concise: 1–4 short lines. No motivational filler, no pep talk, no "let me know if...",
+  no sign-offs. At most one functional emoji (e.g. ⚠️), usually none.
+- Plain words, not jargon (never say "z-score").
+- Money: always the exact currency code from tool results, e.g. "KES 357,065". Never
+  abbreviate it ("K"), never use a symbol, never drop it."""
 
 
 def _fn(name: str, description: str, properties: dict, required: list[str] | None = None):
@@ -125,7 +133,7 @@ def answer(retailer: dict[str, Any], sender: str, text: str) -> str:
         resp = chat(messages, tools=TOOLS, max_tokens=700)
         msg = resp.choices[0].message
         if not getattr(msg, "tool_calls", None):
-            reply = (msg.content or "").strip()
+            reply = to_whatsapp(msg.content or "")
             hist.append({"role": "user", "content": text})
             hist.append({"role": "assistant", "content": reply})
             return reply or "Sorry, I couldn't put that together — try rephrasing?"

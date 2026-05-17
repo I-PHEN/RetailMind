@@ -19,6 +19,11 @@ data/runtime/
 *.sqlite3
 .cache/
 
+# Local tooling
+cloudflared.exe
+models.json
+trigger_out.json
+
 # OS / editor
 .DS_Store
 Thumbs.db

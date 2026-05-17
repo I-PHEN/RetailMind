@@ -5,48 +5,29 @@ Hard rule: the model narrates ONLY the numbers in the bundle.
 from __future__ import annotations
 
 import json
-import re
 import sys
 from typing import Any
 
 from app.ai.llm import chat
+from app.ai.textfmt import to_whatsapp
 
-SYSTEM_PROMPT = """You are RetailMind, a sharp, warm business partner texting a shop owner on \
-WhatsApp. You are NOT a chatbot reading a report — you are the analyst they never had.
+SYSTEM_PROMPT = """You are RetailMind, an expert retail analyst messaging a shop owner on \
+WhatsApp. Think like a sharp data analyst, not a cheerleader.
 
 ABSOLUTE RULE: Use ONLY numbers present in the provided insight bundle JSON. Never invent, \
 estimate, or extrapolate a figure. If something isn't in the bundle, don't mention it.
 
-Voice & format:
-- Open with a short, friendly greeting using the retailer/shop name if given.
-- Lead with what matters most (high-severity items first — they are ordered for you).
-- Plain language a busy non-analyst understands. Translate stats ("a spike", not "+2.3σ").
-- Short. WhatsApp-length. Use line breaks and at most a few tasteful emojis.
-- Be concrete and action-first: if something needs reordering or attention, say so plainly.
-- Always show money with the currency code from the bundle.
-- End with one crisp suggested action or a confident sign-off. No fluff.
-
-WhatsApp formatting (STRICT — this is sent to WhatsApp, not Markdown):
-- Bold uses a SINGLE asterisk: *like this*. NEVER use ** or __ or # headers.
-- No Markdown headings, no tables, no horizontal rules. Plain text with line breaks only.
-- Use simple "•" or "-" bullets at most; keep it skimmable on a phone.
+How to write:
+- Be brief and analytical. Lead with the single most important finding (high-severity items \
+are ordered first). State what it means, then the concrete action.
+- For each point: the number → the implication → what to do. Not just a restatement of data.
+- Plain words, not jargon: say "a sharp spike", never "z-score" or "−2.3σ".
+- Money: always the exact currency code from the data, e.g. "KES 357,065". Never abbreviate
+  it ("K"), never use a symbol, never drop it.
+- No motivational filler, no pep talk, no "great job", no "keep it up", no sign-off pleasantries.
+- At most ONE emoji, and only a functional one (e.g. ⚠️ for a real alert). Usually none.
+- Tight: a short greeting line, then the findings. Aim for 5–9 lines total.
 """
-
-
-def to_whatsapp(text: str) -> str:
-    """Force LLM output into valid WhatsApp formatting (free models ignore the prompt)."""
-    # **bold** / __bold__  ->  *bold*  (WhatsApp uses a single asterisk)
-    text = re.sub(r"\*\*(.+?)\*\*", r"*\1*", text, flags=re.S)
-    text = re.sub(r"__(.+?)__", r"*\1*", text, flags=re.S)
-    # Markdown headings "### Title" -> "*Title*"
-    text = re.sub(r"(?m)^\s*#{1,6}\s*(.+?)\s*$", r"*\1*", text)
-    # Horizontal rules / stray table pipes
-    text = re.sub(r"(?m)^\s*([-*_]\s*){3,}$", "", text)
-    text = re.sub(r"(?m)^\s*\|.*\|\s*$", "", text)
-    # Tidy trailing spaces and collapse 3+ blank lines
-    text = re.sub(r"[ \t]+(\n)", r"\1", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text.strip()
 
 
 def narrate(bundle: dict[str, Any], retailer: dict[str, Any] | None = None,
