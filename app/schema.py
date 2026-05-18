@@ -52,38 +52,55 @@ def normalize(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
         raise ValueError("Source has no rows.")
 
-    rename = _build_reverse_map(list(df.columns))
-    out = df.rename(columns=rename).copy()
+    src = df.rename(columns=_build_reverse_map(list(df.columns)))
+    cols = set(src.columns)
 
-    # Derive revenue if absent but price & qty present.
-    if "revenue" not in out.columns and {"quantity", "unit_price"} <= set(out.columns):
-        out["revenue"] = pd.to_numeric(out["quantity"], errors="coerce") * pd.to_numeric(
-            out["unit_price"], errors="coerce"
-        )
-    # Derive unit_price if absent but revenue & qty present.
-    if "unit_price" not in out.columns and {"quantity", "revenue"} <= set(out.columns):
-        q = pd.to_numeric(out["quantity"], errors="coerce")
-        out["unit_price"] = pd.to_numeric(out["revenue"], errors="coerce") / q.replace(0, pd.NA)
+    def _num(name: str) -> pd.Series | None:
+        return pd.to_numeric(src[name], errors="coerce") if name in cols else None
 
-    missing = [c for c in REQUIRED if c not in out.columns]
+    quantity = _num("quantity")
+    unit_price = _num("unit_price")
+    revenue = _num("revenue")
+    # Derive whichever of revenue / unit_price is missing but inferable.
+    if revenue is None and quantity is not None and unit_price is not None:
+        revenue = quantity * unit_price
+    if unit_price is None and quantity is not None and revenue is not None:
+        unit_price = revenue / quantity.replace(0, pd.NA)
+
+    missing = []
+    if "date" not in cols:
+        missing.append("date")
+    if "product" not in cols:
+        missing.append("product")
+    if quantity is None:
+        missing.append("quantity")
+    if unit_price is None:
+        missing.append("unit_price")
+    if revenue is None:
+        missing.append("revenue")
     if missing:
         raise ValueError(
             f"Could not map required column(s) {missing} from headers "
             f"{list(df.columns)}. Add an alias in app/schema.py."
         )
 
-    out["date"] = out["date"].apply(
-        lambda v: dateparser.parse(str(v)) if pd.notna(v) else pd.NaT
+    # Build a fresh frame column-by-column: correct dtypes, no chained-assignment.
+    norm = pd.DataFrame()
+    norm["date"] = pd.to_datetime(
+        src["date"].apply(lambda v: dateparser.parse(str(v)) if pd.notna(v) else pd.NaT),
+        errors="coerce",
     )
-    out["date"] = pd.to_datetime(out["date"], errors="coerce")
-    out["product"] = out["product"].astype(str).str.strip()
-    for col in ("quantity", "unit_price", "revenue", "unit_cost"):
-        if col in out.columns:
-            out[col] = pd.to_numeric(out[col], errors="coerce")
+    norm["product"] = src["product"].astype(str).str.strip()
+    norm["quantity"] = quantity
+    norm["unit_price"] = unit_price
+    norm["revenue"] = revenue
+    if "category" in cols:
+        norm["category"] = src["category"].astype(str).str.strip()
+    if "unit_cost" in cols:
+        norm["unit_cost"] = _num("unit_cost")
 
-    keep = REQUIRED + [c for c in OPTIONAL if c in out.columns]
-    out = out[keep].dropna(subset=["date", "product"])
-    out = out[out["quantity"].fillna(0) >= 0].sort_values("date").reset_index(drop=True)
-    if out.empty:
+    norm = norm.dropna(subset=["date", "product"])
+    norm = norm[norm["quantity"].fillna(0) >= 0].sort_values("date").reset_index(drop=True)
+    if norm.empty:
         raise ValueError("No valid rows after normalization (check date/quantity columns).")
-    return out
+    return norm
