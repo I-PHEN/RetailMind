@@ -13,6 +13,10 @@ env/
 service-account*.json
 google-credentials*.json
 credentials.json
+# Google Cloud service-account key files (project-id-hash.json)
+retailmind-*.json
+*-*.iam.gserviceaccount.json
+gcp-*.json
 
 # Runtime data
 data/runtime/
