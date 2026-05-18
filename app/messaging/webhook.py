@@ -23,6 +23,14 @@ async def whatsapp_inbound(From: str = Form(""), Body: str = Form("")) -> str:
         log.warning("inbound from unknown number %s", sender)
         return ""  # silently ignore numbers not in the registry
 
+    # Instant "on it" ack so the user knows RetailMind is working (answers can take
+    # several seconds: tool-use loop + free-model failover + cold start). Best-effort —
+    # never let a failed ack block the real answer.
+    try:
+        send_whatsapp(sender, "📊 On it — pulling your numbers…")
+    except Exception:
+        log.warning("ack send failed for %s (continuing)", sender)
+
     try:
         reply = answer(retailer, sender, text)
     except Exception:
