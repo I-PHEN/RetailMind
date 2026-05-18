@@ -17,6 +17,7 @@ credentials.json
 retailmind-*.json
 *-*.iam.gserviceaccount.json
 gcp-*.json
+.mcp.json
 
 # Runtime data
 data/runtime/
