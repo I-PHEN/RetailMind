@@ -81,13 +81,17 @@ conversation is *not* a dashboard — it is used once and never returned to.
    RetailMind number.
 2. RetailMind replies conversationally: *"Hi 👋 I'm RetailMind. To get started I need to see
    your sales. Do you keep them in a spreadsheet file, or Google Sheets?"*
-3. **Connect data — two branches:**
-   - **Spreadsheet file:** *"Just send me the file here."* They attach a CSV/Excel **inside
-     the WhatsApp chat** → ingested. Zero external auth; fully consistent with the thesis.
-     This is the primary self-serve path.
-   - **Google Sheets:** RetailMind sends one secure link → a single "Connect your Google
-     Sheet" page → **Google sign-in (OAuth)** → pick the sheet → done. (OAuth, *not*
-     share-with-service-account — non-technical owners will not reliably do the latter.)
+3. **Connect data — a ladder of methods** (the data-source connector ladder, sequenced in
+   §9). RetailMind asks how they track sales and routes accordingly:
+   - **Spreadsheet file in chat:** they attach a CSV/Excel **inside WhatsApp** → ingested.
+     Zero external auth; primary self-serve path.
+   - **Google Sheets (OAuth):** one secure link → Google sign-in → pick the sheet. (OAuth,
+     *not* share-with-service-account — non-technical owners won't do the latter.)
+   - **POS connect:** one OAuth/token link to their POS (first: **Loyverse**) → sales sync
+     automatically, no files at all.
+   - **Photo of the paper ledger / voice note:** they snap their sales book or say what they
+     sold → vision/voice model → structured sales, with a confirm step. *(The big unlock —
+     most micro-retailers are paper-based. Roadmap, see §9.)*
 4. **Confirmation (trust moment):** RetailMind echoes what it understood —
    *"Got it: 14 products, data Jan–May. First summary now, then every morning at 8am 👍?"*
    This is where `schema.py`'s fuzzy column mapping gets a human sanity-check.
@@ -142,22 +146,80 @@ See `CLAUDE.md` for the technical guide and `README.md` for setup + demo script.
 
 ## 9. Roadmap (post-MVP)
 
-Ordered by what unblocks real users first.
+Strictly sequenced: once the **basic version** (this hackathon MVP — proactive intelligent
+WhatsApp analyst on a connected sheet) is solid, work proceeds in this order. Each phase
+unblocks the next.
 
-1. **Production WhatsApp Business number** — *the key dependency for any real user.* The
-   Twilio sandbox `join <code>` step makes self-serve impossible. Requires a Meta Business
-   account, business verification (~2–10 business days of Meta review — calendar time, not
-   build time; can run in parallel with development), display-name approval, and
-   **pre-approved message templates** for business-initiated messages. Design implication:
-   proactive digests/alerts become templated messages (with variables); conversational
-   replies stay free-form within the 24-hour window. Code change is trivial (swap the
-   sender number) — this is a go-to-market gate, not an engineering one.
-2. **Self-serve WhatsApp-first onboarding** (§5.1): CSV-over-WhatsApp first (no auth), then
-   Google Sheets OAuth + the one-page connect link and the data-confirmation step.
-3. POS integrations (Loyverse, Square, Vend).
-4. Multi-language (Swahili, Pidgin, French) — the narrator is already isolated for this.
-5. Reorder automation: draft purchase orders, supplier reminders.
-6. Demand forecasting & promo recommendations.
-7. Multi-tenant ops: retailer registry in a DB (replacing `retailers.yaml`), billing, and an
-   **internal** admin view for the operator (not a retailer-facing dashboard — the
-   no-dashboard promise is to the retailer, not to ops).
+### Phase A — Make it a product, not a demo (no manual onboarding)
+
+**A1. Production WhatsApp Business number.** *The hard gate for any real user.* The Twilio
+sandbox `join <code>` step makes self-serve impossible. Needs a Meta Business account,
+business verification (~2–10 business days of Meta review — calendar time, not build time,
+runs in parallel), display-name approval, and **pre-approved templates** for
+business-initiated messages. Design implication: proactive digests/alerts become templated
+messages (variables); conversational replies stay free-form inside the 24h window. Code
+change is trivial (swap sender) — a go-to-market gate, not engineering.
+
+**A2. DB-backed multi-tenant + conversational onboarding.** Replace `config/retailers.yaml`
+with a datastore. **The WhatsApp phone number IS the account** — no passwords, no signup
+screen, no dashboard. A conversational onboarding agent provisions a new tenant automatically
+when a number completes setup. This is what removes the founder from the loop.
+
+### Phase B — The data-source connector ladder (how retailers connect their data)
+
+Built in this order; each is one new connector behind the existing canonical-schema layer
+(`app/schema.py` + `app/connectors/`), so the engine/AI never change:
+
+**B1. Spreadsheet file in chat** — retailer sends a CSV/Excel into WhatsApp; ingested with
+zero external auth. Lowest-friction self-serve path; ship first.
+
+**B2. Google Sheets via OAuth** — one "Connect your Google Sheet" link, Google sign-in, pick
+the sheet. Replaces the MVP's manual service-account sharing. Live-updating data.
+
+**B3. POS integration — Loyverse (the one POS for v1).** Rationale: Loyverse POS is **free,
+the most widely used POS among small African retailers, and has an open REST API + OAuth +
+webhooks**. One OAuth connect → automatic sales sync, no files ever. Deliberately *one* POS
+done well; Square / Vend / others come later only after Loyverse proves the pattern.
+
+**B4. Photo of the paper ledger** *(the acquisition moat).* Most micro-retailers track sales
+on paper. Retailer snaps their sales book → vision model → structured sales → "here's what I
+read, correct me?" confirm step. This is the differentiator no dashboard competitor matches.
+
+**B5. Voice-note logging** — *"today I sold 12 bags rice, 3 cooking oil"* → transcription →
+structured entry. Many owners prefer speaking; pairs naturally with B4.
+
+### Phase C — Richer communication
+
+**C1. Visual replies (image output).** RetailMind sends **images, not just text**: a 7-day
+revenue trend, product-mix, or stockout-runway chart, plus the paper-ledger confirm preview.
+Critical constraint — consistent with the trust pillar: charts are **rendered
+deterministically by the engine from real numbers (server-side PNG) and sent via WhatsApp
+media; the LLM never draws or invents a chart.** Sent as a Twilio media message with a short
+caption. Big perceived-intelligence boost for low marginal effort.
+
+**C2. Multi-language & code-switching** (Swahili, Pidgin, Hausa, French, Twi). The narrator
+is already isolated, so this is mostly prompt/locale work.
+
+### Phase D — From analyst to autonomous operator
+
+**D1. Reorder automation** — drafts the purchase order and (with one-tap approval) messages
+the supplier on WhatsApp on the owner's behalf; tracks delivery.
+
+**D2. Demand forecasting & promo/pricing recommendations** — seasonality, paydays, holidays,
+dead-stock clearance suggestions.
+
+### Phase E — Venture-scale
+
+**E1. Data → embedded credit.** With consent, the clean sales history becomes a credit
+signal for shops invisible to banks → unlock inventory financing via partner lenders. The
+"engine computes, AI only narrates" rule is what makes this auditable and fundable. Take-rate
+on financing is the primary business model.
+
+**E2. Network effects** — anonymized benchmarking ("your rice margin is 8% below similar
+nearby shops"), aggregated demand → group-buying / better wholesale pricing (two-sided
+marketplace), multi-shop portfolio view (still entirely in WhatsApp).
+
+### Ops (continuous, not a blocker)
+
+Billing and an **internal** operator admin view — *not* a retailer-facing dashboard; the
+no-dashboard promise is to the retailer, not to ops.
