@@ -15,7 +15,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from app.ai.alert_judge import judge
 from app.ai.narrator import narrate_alert
-from app.messaging.twilio_client import send_whatsapp
+from app.messaging.evolution_client import send_whatsapp
 from app.pipeline import build_for, run_digest
 from app.retailers import all_retailers
 from app.scheduler import alert_state as st
@@ -33,7 +33,7 @@ def _daily_digest(retailer: dict) -> None:
         st.record_digest(state, rid, datetime.now(timezone.utc).isoformat(),
                           res.get("insight_names", []))
         st.save_state(state)
-        log.info("daily digest sent to %s (sid=%s)", rid, res["twilio_sid"])
+        log.info("daily digest sent to %s", rid)
     except Exception:
         log.exception("daily digest failed for %s", rid)
 
@@ -58,16 +58,16 @@ def run_poll(retailer: dict) -> dict:
 
     sent = [ins for ins, _ in candidates if ins["name"] in send_names]
     message = narrate_alert(sent, verdict.get("headline", ""), retailer)
-    sid = send_whatsapp(retailer["whatsapp_to"], message)
+    send_whatsapp(retailer["whatsapp"], message)
 
     now_iso = datetime.now(timezone.utc).isoformat()
     for ins in sent:
         st.set_insight_state(state, rid, ins["name"],
                              ins["severity"], alert_key(ins), now_iso)
     st.save_state(state)
-    log.info("ALERT sent to %s (sid=%s) insights=%s",
-             rid, sid, [i["name"] for i in sent])
-    return {"retailer": rid, "outcome": "alert_sent", "twilio_sid": sid,
+    log.info("ALERT sent to %s insights=%s",
+             rid, [i["name"] for i in sent])
+    return {"retailer": rid, "outcome": "alert_sent",
             "headline": verdict.get("headline", ""),
             "sent": [i["name"] for i in sent], "message": message}
 
