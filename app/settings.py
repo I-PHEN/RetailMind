@@ -14,13 +14,21 @@ class Settings(BaseSettings):
     llm_base_url: str = "https://openrouter.ai/api/v1"
     llm_model: str = "deepseek/deepseek-chat-v3-0324:free"
 
-    # Twilio
-    twilio_account_sid: str = ""
-    twilio_auth_token: str = ""
-    twilio_whatsapp_from: str = "whatsapp:+14155238886"
-    twilio_validate_signature: bool = False
+    # Evolution API (WhatsApp gateway)
+    evolution_api_url: str = ""
+    evolution_api_key: str = ""
+    evolution_instance: str = "retailmind"
 
-    # Google Sheets (optional)
+    # Supabase
+    supabase_url: str = ""
+    supabase_key: str = ""
+
+    # Google OAuth (for Sheets connection during onboarding)
+    google_oauth_client_id: str = ""
+    google_oauth_client_secret: str = ""
+    google_oauth_redirect_uri: str = "http://localhost:8000/auth/google/callback"
+
+    # Google Sheets service account (legacy / dev fallback)
     google_service_account_json: str = "./service-account.json"
 
     # App
