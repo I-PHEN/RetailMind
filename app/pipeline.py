@@ -9,8 +9,20 @@ from app.connectors import load_source
 from app.messaging.evolution_client import send_whatsapp
 
 
+def _source_from_retailer(retailer: dict[str, Any]) -> dict[str, Any]:
+    """Build a source config dict from either a YAML retailer or a Supabase retailer."""
+    if "source" in retailer:
+        return retailer["source"]  # YAML shape — already a source dict
+    # Supabase shape — flat fields
+    return {
+        "type": "google_sheet",
+        "spreadsheet_id": retailer["spreadsheet_id"],
+        "google_token": retailer.get("google_token"),
+    }
+
+
 def build_for(retailer: dict[str, Any]) -> dict[str, Any]:
-    df = load_source(retailer["source"])
+    df = load_source(_source_from_retailer(retailer))
     return build_bundle(df, {"currency": retailer.get("currency", ""), "retailer": retailer})
 
 
