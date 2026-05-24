@@ -32,6 +32,9 @@ cf.out
 cf.log
 uv.log
 
+# Worktrees
+.worktrees/
+
 # OS / editor
 .DS_Store
 Thumbs.db
