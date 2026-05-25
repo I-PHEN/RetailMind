@@ -4,7 +4,8 @@ from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import HTMLResponse
 
 from app.messaging.webhook import router as webhook_router
 from app.pipeline import run_digest
@@ -34,13 +35,32 @@ def health() -> dict:
     return {"status": "ok", "retailers": [r["id"] for r in all_retailers()]}
 
 
+@app.get("/auth/google/callback", response_class=HTMLResponse)
+def google_oauth_callback(
+    code: str = Query(...),
+    state: str = Query(...),
+) -> HTMLResponse:
+    """Google redirects here after the retailer authorises access to their Sheet."""
+    from app.onboarding.oauth import complete_onboarding
+    try:
+        complete_onboarding(code=code, state_token=state)
+    except Exception:
+        log.exception("OAuth callback failed")
+        return HTMLResponse(
+            "<html><body><h2>Something went wrong.</h2>"
+            "<p>Please go back to WhatsApp and try again.</p></body></html>",
+            status_code=500,
+        )
+    return HTMLResponse(
+        "<html><body>"
+        "<h2>You're connected! ✅</h2>"
+        "<p>Go back to WhatsApp — RetailMind is sending your first summary now.</p>"
+        "</body></html>"
+    )
+
+
 @app.post("/trigger/{retailer_id}")
 def trigger(retailer_id: str, mode: str = "digest", send: bool = True) -> dict:
-    """Fire a digest (or alert) on demand — the live-demo button.
-
-    `?send=false` returns the message without sending (safe to call without Twilio).
-    `?mode=alert` produces just the urgent items.
-    """
     retailer = get_retailer(retailer_id)
     if not retailer:
         raise HTTPException(404, f"unknown retailer {retailer_id!r}")
@@ -53,12 +73,6 @@ def trigger(retailer_id: str, mode: str = "digest", send: bool = True) -> dict:
 
 @app.post("/poll/{retailer_id}")
 def poll(retailer_id: str) -> dict:
-    """Run one intelligent-alert cycle on demand (the autonomous-alert demo button).
-
-    Same logic the scheduler runs every few minutes: engine → policy → LLM judge →
-    alert voice. Returns the outcome: no_candidates / judge_suppressed_all / alert_sent.
-    Call it twice with no data change to show it alerts once, then stays quiet.
-    """
     retailer = get_retailer(retailer_id)
     if not retailer:
         raise HTTPException(404, f"unknown retailer {retailer_id!r}")
