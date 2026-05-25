@@ -1,44 +1,80 @@
-"""Twilio inbound WhatsApp webhook → conversational agent → reply."""
+"""Evolution API inbound WhatsApp webhook → route to onboarding or agent."""
 from __future__ import annotations
 
 import logging
 
-from fastapi import APIRouter, Form
-from fastapi.responses import PlainTextResponse
+from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
 
 from app.ai.agent import answer
-from app.messaging.twilio_client import send_whatsapp
+from app.messaging.evolution_client import send_whatsapp
+from app.onboarding.fsm import handle as onboarding_handle
 from app.retailers import by_whatsapp
 
 log = logging.getLogger("retailmind.webhook")
 router = APIRouter()
 
 
-@router.post("/webhook/whatsapp", response_class=PlainTextResponse)
-async def whatsapp_inbound(From: str = Form(""), Body: str = Form("")) -> str:
-    """Twilio posts form-encoded; we reply out-of-band via the REST API and 200 fast."""
-    sender, text = From.strip(), Body.strip()
-    retailer = by_whatsapp(sender)
-    if not retailer:
-        log.warning("inbound from unknown number %s", sender)
-        return ""  # silently ignore numbers not in the registry
+def _extract(payload: dict) -> tuple[str, str] | None:
+    """Return (normalised_number, message_text) or None if not a real inbound message."""
+    if payload.get("event") != "messages.upsert":
+        return None
+    data = payload.get("data", {})
+    key = data.get("key", {})
+    if key.get("fromMe"):
+        return None  # ignore echo of bot's own sends
+    jid = key.get("remoteJid", "")
+    if not jid:
+        return None
+    # normalise JID → E.164
+    number = "+" + jid.split("@")[0].lstrip("+")
+    msg = data.get("message", {})
+    text = (
+        msg.get("conversation")
+        or msg.get("extendedTextMessage", {}).get("text")
+        or ""
+    ).strip()
+    if not text:
+        return None
+    return number, text
 
-    # Instant "on it" ack so the user knows RetailMind is working (answers can take
-    # several seconds: tool-use loop + free-model failover + cold start). Best-effort —
-    # never let a failed ack block the real answer.
+
+@router.post("/webhook/whatsapp")
+async def whatsapp_inbound(request: Request) -> JSONResponse:
+    """Evolution posts JSON; we ack immediately and handle out-of-band."""
     try:
-        send_whatsapp(sender, "📊 On it — pulling your numbers…")
+        payload = await request.json()
     except Exception:
-        log.warning("ack send failed for %s (continuing)", sender)
+        return JSONResponse({})
+
+    extracted = _extract(payload)
+    if extracted is None:
+        return JSONResponse({})
+
+    number, text = extracted
+    retailer = by_whatsapp(number)
+
+    if retailer is None:
+        try:
+            onboarding_handle(number, text)
+        except Exception:
+            log.exception("onboarding failed for %s", number)
+        return JSONResponse({})
+
+    # Known retailer — ack then answer
+    try:
+        send_whatsapp(number, "📊 On it — pulling your numbers…")
+    except Exception:
+        log.warning("ack failed for %s", number)
 
     try:
-        reply = answer(retailer, sender, text)
+        reply = answer(retailer, number, text)
+        send_whatsapp(number, reply)
     except Exception:
-        log.exception("agent failed for %s", retailer["id"])
-        reply = "Sorry, I hit a snag pulling that up. Try again in a moment?"
+        log.exception("agent failed for %s", retailer.get("id"))
+        try:
+            send_whatsapp(number, "Sorry, I hit a snag. Try again in a moment?")
+        except Exception:
+            pass
 
-    try:
-        send_whatsapp(sender, reply)
-    except Exception:
-        log.exception("failed sending reply to %s", sender)
-    return ""
+    return JSONResponse({})
