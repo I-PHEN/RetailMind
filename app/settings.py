@@ -14,10 +14,9 @@ class Settings(BaseSettings):
     llm_base_url: str = "https://openrouter.ai/api/v1"
     llm_model: str = "deepseek/deepseek-chat-v3-0324:free"
 
-    # Evolution API (WhatsApp gateway)
-    evolution_api_url: str = ""
-    evolution_api_key: str = ""
-    evolution_instance: str = "retailmind"
+    # Wuzapi (WhatsApp gateway — local Docker)
+    wuzapi_api_url: str = "http://localhost:8080"
+    wuzapi_token: str = ""
 
     # Supabase
     supabase_url: str = ""
@@ -27,6 +26,7 @@ class Settings(BaseSettings):
     google_oauth_client_id: str = ""
     google_oauth_client_secret: str = ""
     google_oauth_redirect_uri: str = "http://localhost:8000/auth/google/callback"
+    google_api_key: str = ""  # for the Google Picker widget on the sheet-picker page
 
     # Google Sheets service account (legacy / dev fallback)
     google_service_account_json: str = "./service-account.json"

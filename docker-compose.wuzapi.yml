@@ -1,0 +1,13 @@
+services:
+  wuzapi:
+    image: asternic/wuzapi:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      WUZAPI_ADMIN_TOKEN: retailmind-secret
+    volumes:
+      - wuzapi_data:/app/dbdata
+
+volumes:
+  wuzapi_data:

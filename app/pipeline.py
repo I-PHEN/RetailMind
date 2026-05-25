@@ -6,7 +6,7 @@ from typing import Any
 from app.ai.narrator import narrate
 from app.analytics.engine import build_bundle
 from app.connectors import load_source
-from app.messaging.evolution_client import send_whatsapp
+from app.messaging.wuzapi_client import send_whatsapp
 
 
 def _source_from_retailer(retailer: dict[str, Any]) -> dict[str, Any]:

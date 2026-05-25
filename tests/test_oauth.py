@@ -7,6 +7,7 @@ def _mock_settings():
         google_oauth_client_id="client_id",
         google_oauth_client_secret="client_secret",
         google_oauth_redirect_uri="https://app.example.com/auth/google/callback",
+        google_api_key="picker_api_key",
     )
 
 
@@ -19,11 +20,12 @@ def test_build_oauth_url_contains_state():
         assert len(state_token) == 32  # 16 bytes hex
 
 
-def test_build_oauth_url_has_sheets_scope():
+def test_build_oauth_url_has_sheets_and_drive_file_scopes():
     with patch("app.onboarding.oauth.get_settings", return_value=_mock_settings()):
         from app.onboarding.oauth import build_oauth_url
         url, _ = build_oauth_url("+2348012345678")
         assert "spreadsheets.readonly" in url
+        assert "drive.file" in url
 
 
 def test_state_token_is_unique():
@@ -34,15 +36,15 @@ def test_state_token_is_unique():
         assert t1 != t2
 
 
-def test_complete_onboarding_creates_retailer_and_sends_digest():
-    fake_tokens = {
-        "access_token": "acc",
-        "refresh_token": "ref",
-        "expiry": None,
-        "client_id": "cid",
-        "client_secret": "cs",
+def _fake_tokens():
+    return {
+        "access_token": "acc", "refresh_token": "ref", "expiry": None,
+        "client_id": "cid", "client_secret": "cs",
     }
-    fake_state_row = {
+
+
+def _fake_state_row():
+    return {
         "whatsapp": "+2348012345678",
         "step": "awaiting_oauth",
         "data": {
@@ -50,23 +52,62 @@ def test_complete_onboarding_creates_retailer_and_sends_digest():
             "shop_name": "Amina's Mini-Mart",
             "oauth_state_token": "tok123",
             "timezone": "Africa/Lagos",
+            "currency": "NGN",
         },
     }
+
+
+def test_handle_oauth_callback_advances_to_awaiting_sheet_pick():
     sb = MagicMock()
-    # state lookup by token
-    select_chain = MagicMock()
     sb.table.return_value.select.return_value.filter.return_value.execute.return_value = \
-        MagicMock(data=[fake_state_row])
-    sb.table.return_value.insert.return_value.execute.return_value = \
-        MagicMock(data=[{"id": "amina_minimart"}])
+        MagicMock(data=[_fake_state_row()])
+    sb.table.return_value.upsert.return_value.execute.return_value = MagicMock()
+
+    with patch("app.onboarding.oauth.exchange_code", return_value=_fake_tokens()), \
+         patch("app.onboarding.oauth._get_supabase", return_value=sb):
+        from app.onboarding.oauth import handle_oauth_callback
+        whatsapp, access_token = handle_oauth_callback(code="x", state_token="tok123")
+        assert whatsapp == "+2348012345678"
+        assert access_token == "acc"
+        upsert_payload = sb.table.return_value.upsert.call_args[0][0]
+        assert upsert_payload["step"] == "awaiting_sheet_pick"
+        assert upsert_payload["data"]["google_token"]["access_token"] == "acc"
+
+
+def test_finalize_with_sheet_creates_retailer_with_spreadsheet_id():
+    row = _fake_state_row()
+    row["step"] = "awaiting_sheet_pick"
+    row["data"]["google_token"] = _fake_tokens()
+
+    sb = MagicMock()
+    sb.table.return_value.select.return_value.filter.return_value.execute.return_value = \
+        MagicMock(data=[row])
     sb.table.return_value.delete.return_value.eq.return_value.execute.return_value = None
 
-    with patch("app.onboarding.oauth.exchange_code", return_value=fake_tokens), \
-         patch("app.onboarding.oauth._get_supabase", return_value=sb), \
-         patch("app.retailers.create_retailer", return_value={"id": "amina_minimart", "whatsapp": "+2348012345678"}), \
-         patch("app.messaging.evolution_client.send_whatsapp") as mock_send, \
+    with patch("app.onboarding.oauth._get_supabase", return_value=sb), \
+         patch("app.retailers.create_retailer",
+               return_value={"id": "aminas_minimart", "whatsapp": "+2348012345678",
+                             "spreadsheet_id": "SHEET123"}) as mock_create, \
+         patch("app.messaging.wuzapi_client.send_whatsapp") as mock_send, \
          patch("app.pipeline.run_digest") as mock_digest:
-        from app.onboarding.oauth import complete_onboarding
-        complete_onboarding(code="authcode123", state_token="tok123")
+        from app.onboarding.oauth import finalize_with_sheet
+        finalize_with_sheet(state_token="tok123", spreadsheet_id="SHEET123")
+        created = mock_create.call_args[0][0]
+        assert created["spreadsheet_id"] == "SHEET123"
+        assert created["google_token"]["access_token"] == "acc"
+        assert created["currency"] == "NGN"
         mock_send.assert_called()
         mock_digest.assert_called_once()
+
+
+def test_finalize_with_sheet_rejects_when_tokens_missing():
+    row = _fake_state_row()
+    row["step"] = "awaiting_sheet_pick"
+    # no google_token in data
+    sb = MagicMock()
+    sb.table.return_value.select.return_value.filter.return_value.execute.return_value = \
+        MagicMock(data=[row])
+    with patch("app.onboarding.oauth._get_supabase", return_value=sb):
+        from app.onboarding.oauth import finalize_with_sheet
+        with pytest.raises(ValueError, match="tokens missing"):
+            finalize_with_sheet(state_token="tok123", spreadsheet_id="X")

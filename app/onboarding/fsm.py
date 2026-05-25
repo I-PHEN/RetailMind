@@ -8,7 +8,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from app.messaging.evolution_client import send_whatsapp, send_whatsapp_link
+from app.messaging.wuzapi_client import send_whatsapp, send_whatsapp_link
 from app.onboarding.name_parser import parse_name
 from app.onboarding.oauth import build_oauth_url
 from app.settings import get_settings
@@ -30,12 +30,34 @@ _TIMEZONE_MAP = {
 
 _DEFAULT_TZ = "Africa/Lagos"
 
+_CURRENCY_MAP = {
+    "+234": "NGN",
+    "+254": "KES",
+    "+233": "GHS",
+    "+256": "UGX",
+    "+255": "TZS",
+    "+27":  "ZAR",
+    "+260": "ZMW",
+    "+263": "ZWL",
+    "+225": "XOF",
+    "+221": "XOF",
+}
+
+_DEFAULT_CURRENCY = "USD"
+
 
 def _detect_timezone(whatsapp: str) -> str:
     for prefix, tz in _TIMEZONE_MAP.items():
         if whatsapp.startswith(prefix):
             return tz
     return _DEFAULT_TZ
+
+
+def _detect_currency(whatsapp: str) -> str:
+    for prefix, cur in _CURRENCY_MAP.items():
+        if whatsapp.startswith(prefix):
+            return cur
+    return _DEFAULT_CURRENCY
 
 
 # --- Supabase access (module-level so tests can patch) ---
@@ -100,6 +122,7 @@ def handle(whatsapp: str, text: str) -> None:
             "shop_name": shop,
             "oauth_state_token": state_token,
             "timezone": _detect_timezone(whatsapp),
+            "currency": _detect_currency(whatsapp),
         })
         send_whatsapp(whatsapp, f"Nice to meet you {owner}! 🛒\n\nNow I need to see your sales data. Tap below to connect your Google Sheet:")
         send_whatsapp_link(

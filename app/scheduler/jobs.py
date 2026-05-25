@@ -15,7 +15,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from app.ai.alert_judge import judge
 from app.ai.narrator import narrate_alert
-from app.messaging.evolution_client import send_whatsapp
+from app.messaging.wuzapi_client import send_whatsapp
 from app.pipeline import build_for, run_digest
 from app.retailers import all_retailers
 from app.scheduler import alert_state as st

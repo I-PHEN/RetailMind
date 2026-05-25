@@ -66,7 +66,10 @@ def get_retailer(retailer_id: str) -> dict[str, Any] | None:
     if sb is None:
         return next((r for r in _load_yaml() if r.get("id") == retailer_id), None)
     resp = sb.table("retailers").select("*").eq("id", retailer_id).execute()
-    return resp.data[0] if resp.data else None
+    if resp.data:
+        return resp.data[0]
+    # fall back to YAML for dev/demo retailers not yet in DB
+    return next((r for r in _load_yaml() if r.get("id") == retailer_id), None)
 
 
 def by_whatsapp(number: str) -> dict[str, Any] | None:
