@@ -31,8 +31,8 @@ def test_by_whatsapp_yaml_fallback(monkeypatch):
     _clear_cache()
 
     from app.retailers import by_whatsapp
-    # The demo retailer has whatsapp_to: "whatsapp:+254700000000"
-    r = by_whatsapp("+254700000000")
+    # The demo retailer has whatsapp_to: "whatsapp:+233242679643"
+    r = by_whatsapp("+233242679643")
     assert r is not None
     assert r["id"] == "demo"
 
@@ -57,5 +57,5 @@ def test_digits_normalisation(monkeypatch):
 
     from app.retailers import by_whatsapp
     # whatsapp: prefix and leading + should still match
-    r = by_whatsapp("whatsapp:+254700000000")
+    r = by_whatsapp("whatsapp:+233242679643")
     assert r is not None
