@@ -1,17 +1,19 @@
 # Render Blueprint for RetailMind.
 #
-# After creating the Blueprint from this repo, in the Render dashboard add:
-#   Environment > Environment Variables (Secret):
-#     LLM_API_KEY, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_FROM
-#   Environment > Secret Files (NEVER in git):
-#     service-account.json    -> the GCP service-account key JSON contents
-#     retailers_prod.yaml     -> the real retailer config (has the phone number)
-# Then point the Twilio sandbox inbound webhook at:
-#     https://<service>.onrender.com/webhook/whatsapp
+# After deploying:
+#   1. In the Evolution service dashboard → scan QR with your WhatsApp number.
+#   2. In the RetailMind service → add secret env vars (see below).
+#   3. Point Evolution webhook at: https://<retailmind-service>.onrender.com/webhook/whatsapp
+#   4. Add Google OAuth redirect URI in Google Cloud Console.
 #
-# Note: Render free web services sleep after ~15 min idle; the in-process
-# scheduler sleeps with them. Keep it warm with an external pinger on /health
-# (handled as a separate deploy step).
+# Secret env vars to set manually in Render dashboard (never in git):
+#   RetailMind service:
+#     LLM_API_KEY, EVOLUTION_API_KEY, SUPABASE_URL, SUPABASE_KEY,
+#     GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET, GOOGLE_OAUTH_REDIRECT_URI,
+#     APP_BASE_URL (= https://<retailmind>.onrender.com)
+#   Evolution service:
+#     AUTHENTICATION_API_KEY  (same value as EVOLUTION_API_KEY above)
+
 services:
   - type: web
     name: retailmind
@@ -27,15 +29,47 @@ services:
         value: https://openrouter.ai/api/v1
       - key: LLM_MODEL
         value: qwen/qwen3-next-80b-a3b-instruct:free
-      - key: GOOGLE_SERVICE_ACCOUNT_JSON
-        value: ./service-account.json        # provided via Render Secret File
-      - key: RETAILMIND_CONFIG
-        value: ./retailers_prod.yaml          # provided via Render Secret File
+      - key: EVOLUTION_INSTANCE
+        value: retailmind
       - key: LLM_API_KEY
         sync: false
-      - key: TWILIO_ACCOUNT_SID
+      - key: EVOLUTION_API_URL
         sync: false
-      - key: TWILIO_AUTH_TOKEN
+      - key: EVOLUTION_API_KEY
         sync: false
-      - key: TWILIO_WHATSAPP_FROM
+      - key: SUPABASE_URL
         sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_ID
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_OAUTH_REDIRECT_URI
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
+
+  - type: web
+    name: retailmind-evolution
+    runtime: docker
+    plan: starter          # needs always-on + persistent disk
+    dockerfilePath: ./evolution.Dockerfile
+    healthCheckPath: /
+    disk:
+      name: evolution-sessions
+      mountPath: /evolution/instances
+      sizeGB: 1
+    envVars:
+      - key: AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES
+        value: "true"
+      - key: AUTHENTICATION_TYPE
+        value: apikey
+      - key: AUTHENTICATION_API_KEY
+        sync: false        # set same value as EVOLUTION_API_KEY in retailmind service
+      - key: WEBHOOK_GLOBAL_URL
+        sync: false        # set to https://<retailmind>.onrender.com/webhook/whatsapp
+      - key: WEBHOOK_GLOBAL_ENABLED
+        value: "true"
+      - key: WEBHOOK_EVENTS_MESSAGES_UPSERT
+        value: "true"
