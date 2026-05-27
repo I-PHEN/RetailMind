@@ -8,9 +8,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from app.messaging.wuzapi_client import send_whatsapp, send_whatsapp_link
-from app.onboarding.name_parser import parse_name
-from app.onboarding.oauth import build_oauth_url
+from app.messaging.wuzapi_client import send_whatsapp
+from app.onboarding import agent as onboarding_agent
 from app.settings import get_settings
 
 log = logging.getLogger("retailmind.onboarding")
@@ -97,49 +96,41 @@ def _set_state(whatsapp: str, step: str, data: dict[str, Any]) -> None:
 
 
 def handle(whatsapp: str, text: str) -> None:
-    """Process one inbound message from an unknown (onboarding) number."""
+    """Process one inbound message from an unknown (onboarding) number.
+
+    Routes based on the FSM step:
+      - awaiting_name (or first contact): hand to the LLM-driven agent
+      - awaiting_oauth / awaiting_sheet_pick: simple reminder
+    """
     state = _get_state(whatsapp)
-
-    if state is None:
-        # First contact — send greeting and record state
-        _set_state(whatsapp, "awaiting_name", {})
-        send_whatsapp(
-            whatsapp,
-            "Hi 👋 I'm RetailMind, your AI business partner.\n\n"
-            "What's your name and what do you call your shop?",
-        )
-        return
-
-    step = state.get("step", "greeting")
-    data = state.get("data", {})
+    step = (state or {}).get("step", "awaiting_name")
+    data = (state or {}).get("data", {})
 
     if step == "awaiting_name":
-        owner, shop = parse_name(text)
-        auth_url, state_token = build_oauth_url(whatsapp)
-        _set_state(whatsapp, "awaiting_oauth", {
-            **data,
-            "name": owner,
-            "shop_name": shop,
-            "oauth_state_token": state_token,
-            "timezone": _detect_timezone(whatsapp),
-            "currency": _detect_currency(whatsapp),
-        })
-        send_whatsapp(whatsapp, f"Nice to meet you {owner}! 🛒\n\nNow I need to see your sales data. Tap below to connect your Google Sheet:")
-        send_whatsapp_link(
-            whatsapp,
-            auth_url,
-            "Connect Google Sheet",
-            "Tap to authorise RetailMind to read your sales sheet",
+        onboarding_agent.respond(
+            whatsapp=whatsapp,
+            text=text,
+            current_data=data,
+            persist_state=lambda new_step, new_data: _set_state(whatsapp, new_step, new_data),
         )
         return
 
     if step == "awaiting_oauth":
-        # They messaged again before completing OAuth — remind them
         send_whatsapp(
             whatsapp,
             "Still waiting for you to connect your Google Sheet 👆\n"
             "Tap the link above when you're ready!",
         )
         return
+
+    if step == "awaiting_sheet_pick":
+        send_whatsapp(
+            whatsapp,
+            "You're almost done — go back to that 'Choose Google Sheet' page "
+            "and pick your sales sheet 📋",
+        )
+        return
+
+    log.warning("onboarding handle called for %s in unknown step %s", whatsapp, step)
 
     log.warning("onboarding handle called for %s in unknown step %s", whatsapp, step)

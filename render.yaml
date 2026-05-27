@@ -1,18 +1,21 @@
 # Render Blueprint for RetailMind.
 #
 # After deploying:
-#   1. In the Evolution service dashboard → scan QR with your WhatsApp number.
+#   1. Run Wuzapi somewhere reachable (local Docker via ngrok, or its own Render
+#      docker service). Pair your WhatsApp number, set the webhook to
+#      https://<retailmind-service>.onrender.com/webhook/whatsapp.
 #   2. In the RetailMind service → add secret env vars (see below).
-#   3. Point Evolution webhook at: https://<retailmind-service>.onrender.com/webhook/whatsapp
-#   4. Add Google OAuth redirect URI in Google Cloud Console.
+#   3. Add Google OAuth redirect URI in Google Cloud Console:
+#      https://<retailmind-service>.onrender.com/auth/google/callback
 #
 # Secret env vars to set manually in Render dashboard (never in git):
-#   RetailMind service:
-#     LLM_API_KEY, EVOLUTION_API_KEY, SUPABASE_URL, SUPABASE_KEY,
-#     GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET, GOOGLE_OAUTH_REDIRECT_URI,
-#     APP_BASE_URL (= https://<retailmind>.onrender.com)
-#   Evolution service:
-#     AUTHENTICATION_API_KEY  (same value as EVOLUTION_API_KEY above)
+#   LLM_API_KEY        (Groq key from console.groq.com)
+#   WUZAPI_API_URL     (https://<your-wuzapi-host>:8080)
+#   WUZAPI_TOKEN       (per-user token from Wuzapi admin panel)
+#   SUPABASE_URL, SUPABASE_KEY
+#   GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET, GOOGLE_OAUTH_REDIRECT_URI
+#   GOOGLE_API_KEY     (for the in-browser Picker widget; restrict to Picker API)
+#   APP_BASE_URL       (= https://<retailmind>.onrender.com)
 
 services:
   - type: web
@@ -26,16 +29,14 @@ services:
       - key: PYTHON_VERSION
         value: "3.12.7"
       - key: LLM_BASE_URL
-        value: https://openrouter.ai/api/v1
+        value: https://api.groq.com/openai/v1
       - key: LLM_MODEL
-        value: qwen/qwen3-next-80b-a3b-instruct:free
-      - key: EVOLUTION_INSTANCE
-        value: retailmind
+        value: openai/gpt-oss-120b
       - key: LLM_API_KEY
         sync: false
-      - key: EVOLUTION_API_URL
+      - key: WUZAPI_API_URL
         sync: false
-      - key: EVOLUTION_API_KEY
+      - key: WUZAPI_TOKEN
         sync: false
       - key: SUPABASE_URL
         sync: false
@@ -47,29 +48,7 @@ services:
         sync: false
       - key: GOOGLE_OAUTH_REDIRECT_URI
         sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
       - key: APP_BASE_URL
         sync: false
-
-  - type: web
-    name: retailmind-evolution
-    runtime: docker
-    plan: starter          # needs always-on + persistent disk
-    dockerfilePath: ./evolution.Dockerfile
-    healthCheckPath: /
-    disk:
-      name: evolution-sessions
-      mountPath: /evolution/instances
-      sizeGB: 1
-    envVars:
-      - key: AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES
-        value: "true"
-      - key: AUTHENTICATION_TYPE
-        value: apikey
-      - key: AUTHENTICATION_API_KEY
-        sync: false        # set same value as EVOLUTION_API_KEY in retailmind service
-      - key: WEBHOOK_GLOBAL_URL
-        sync: false        # set to https://<retailmind>.onrender.com/webhook/whatsapp
-      - key: WEBHOOK_GLOBAL_ENABLED
-        value: "true"
-      - key: WEBHOOK_EVENTS_MESSAGES_UPSERT
-        value: "true"

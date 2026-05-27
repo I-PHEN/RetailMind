@@ -9,10 +9,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    # LLM (OpenAI-compatible; OpenRouter by default)
+    # LLM (Groq — OpenAI-compatible endpoint, very fast)
     llm_api_key: str = ""
-    llm_base_url: str = "https://openrouter.ai/api/v1"
-    llm_model: str = "deepseek/deepseek-chat-v3-0324:free"
+    llm_base_url: str = "https://api.groq.com/openai/v1"
+    llm_model: str = "openai/gpt-oss-120b"
 
     # Wuzapi (WhatsApp gateway — local Docker)
     wuzapi_api_url: str = "http://localhost:8080"

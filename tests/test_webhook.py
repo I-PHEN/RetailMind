@@ -40,19 +40,22 @@ def _direct_text(phone: str, text: str, *, key: str = "conversation") -> dict:
 def test_unknown_number_routes_to_onboarding():
     client = TestClient(_make_app())
     with patch("app.messaging.webhook.by_whatsapp", return_value=None), \
+         patch("app.messaging.webhook.send_typing") as mock_typing, \
          patch("app.messaging.webhook.onboarding_handle") as mock_onboard:
         resp = client.post(
             "/webhook/whatsapp",
             json=_wuzapi_envelope(_direct_text("2348012345678", "Hi")),
         )
         assert resp.status_code == 200
+        mock_typing.assert_called_once_with("+2348012345678")
         mock_onboard.assert_called_once_with("+2348012345678", "Hi")
 
 
-def test_known_number_routes_to_agent():
+def test_known_number_routes_to_agent_with_single_reply():
     client = TestClient(_make_app())
     retailer = {"id": "demo", "whatsapp": "+2348012345678"}
     with patch("app.messaging.webhook.by_whatsapp", return_value=retailer), \
+         patch("app.messaging.webhook.send_typing") as mock_typing, \
          patch("app.messaging.webhook.answer", return_value="reply text") as mock_answer, \
          patch("app.messaging.webhook.send_whatsapp") as mock_send:
         resp = client.post(
@@ -60,8 +63,10 @@ def test_known_number_routes_to_agent():
             json=_wuzapi_envelope(_direct_text("2348012345678", "How were sales?")),
         )
         assert resp.status_code == 200
+        mock_typing.assert_called_once_with("+2348012345678")
         mock_answer.assert_called_once()
-        mock_send.assert_called()
+        # No more "On it..." ack — just the one real reply.
+        mock_send.assert_called_once_with("+2348012345678", "reply text")
 
 
 def test_ignores_own_echoes():
@@ -170,3 +175,23 @@ def test_device_suffix_stripped_from_jid():
         resp = client.post("/webhook/whatsapp", json=_wuzapi_envelope(inner))
         assert resp.status_code == 200
         mock_onboard.assert_called_once_with("+5491155551122", "hi")
+
+
+def test_form_encoded_payload_works():
+    """Real Wuzapi sends application/x-www-form-urlencoded, not JSON."""
+    client = TestClient(_make_app())
+    inner = _direct_text("2348012345678", "from form")
+    form_data = {
+        "instanceName": "retailmind",
+        "userID": "user123",
+        "jsonData": json.dumps(inner),
+    }
+    with patch("app.messaging.webhook.by_whatsapp", return_value=None), \
+         patch("app.messaging.webhook.onboarding_handle") as mock_onboard:
+        resp = client.post(
+            "/webhook/whatsapp",
+            data=form_data,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        )
+        assert resp.status_code == 200
+        mock_onboard.assert_called_once_with("+2348012345678", "from form")

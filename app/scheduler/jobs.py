@@ -15,9 +15,10 @@ from apscheduler.triggers.cron import CronTrigger
 
 from app.ai.alert_judge import judge
 from app.ai.narrator import narrate_alert
-from app.messaging.wuzapi_client import send_whatsapp
+from app.charts.policy import pick_chart_for_message
+from app.messaging.wuzapi_client import send_whatsapp, send_whatsapp_image
 from app.pipeline import build_for, run_digest
-from app.retailers import all_retailers
+from app.retailers import all_retailers, get_retailer
 from app.scheduler import alert_state as st
 from app.scheduler.alert_policy import alert_key, select_candidates
 
@@ -26,6 +27,9 @@ log = logging.getLogger("retailmind.scheduler")
 
 def _daily_digest(retailer: dict) -> None:
     rid = retailer["id"]
+    # Re-fetch from the DB so we see updated spreadsheet_id / google_token,
+    # not the stale snapshot the scheduler was registered with.
+    retailer = get_retailer(rid) or retailer
     try:
         res = run_digest(retailer, mode="digest", send=True)
         # Tell the judge what the owner already heard today (avoid re-pinging it).
@@ -57,8 +61,18 @@ def run_poll(retailer: dict) -> dict:
                 "dropped": verdict.get("dropped", []), "sent": []}
 
     sent = [ins for ins, _ in candidates if ins["name"] in send_names]
-    message = narrate_alert(sent, verdict.get("headline", ""), retailer)
-    send_whatsapp(retailer["whatsapp"], message)
+    # Chart is restricted to the insights the judge approved.
+    pick = pick_chart_for_message(sent)
+    has_chart = pick is not None
+    message = narrate_alert(sent, verdict.get("headline", ""), retailer, has_chart=has_chart)
+    if pick is not None:
+        try:
+            send_whatsapp_image(retailer["whatsapp"], pick[1], caption=message)
+        except Exception:
+            log.exception("alert image send failed, falling back to text-only")
+            send_whatsapp(retailer["whatsapp"], message)
+    else:
+        send_whatsapp(retailer["whatsapp"], message)
 
     now_iso = datetime.now(timezone.utc).isoformat()
     for ins in sent:
@@ -69,15 +83,20 @@ def run_poll(retailer: dict) -> dict:
              rid, [i["name"] for i in sent])
     return {"retailer": rid, "outcome": "alert_sent",
             "headline": verdict.get("headline", ""),
+            "has_chart": has_chart,
+            "chart_insight": pick[0]["name"] if pick else None,
             "sent": [i["name"] for i in sent], "message": message}
 
 
 def _anomaly_poll(retailer: dict) -> None:
+    rid = retailer.get("id")
+    # Re-fetch — see _daily_digest for why.
+    retailer = get_retailer(rid) or retailer
     try:
         result = run_poll(retailer)
-        log.info("poll %s — %s", retailer["id"], result["outcome"])
+        log.info("poll %s — %s", rid, result["outcome"])
     except Exception:
-        log.exception("anomaly poll failed for %s", retailer.get("id"))
+        log.exception("anomaly poll failed for %s", rid)
 
 
 def start_scheduler() -> BackgroundScheduler:

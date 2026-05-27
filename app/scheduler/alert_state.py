@@ -15,8 +15,11 @@ from __future__ import annotations
 
 import json
 import logging
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from dateutil import parser as dateparser
 
 log = logging.getLogger("retailmind.alert_state")
 
@@ -60,3 +63,43 @@ def record_digest(state: dict, retailer_id: str, at_iso: str, names: list[str]) 
 
 def last_digest(state: dict, retailer_id: str) -> dict | None:
     return state.get("_digest", {}).get(retailer_id)
+
+
+def set_pause(state: dict, retailer_id: str, until_iso: str,
+              reason: str | None = None) -> None:
+    """Tell the alerter to stay quiet for this retailer until `until_iso`."""
+    state.setdefault("_pause", {})[retailer_id] = {
+        "until_iso": until_iso,
+        "reason": (reason or "").strip() or None,
+    }
+
+
+def clear_pause(state: dict, retailer_id: str) -> None:
+    state.get("_pause", {}).pop(retailer_id, None)
+
+
+def is_paused(state: dict, retailer_id: str, now: datetime | None = None) -> bool:
+    entry = state.get("_pause", {}).get(retailer_id)
+    if not entry or not entry.get("until_iso"):
+        return False
+    try:
+        until = dateparser.parse(entry["until_iso"])
+    except Exception:
+        return False
+    now = now or datetime.now(timezone.utc)
+    return now < until
+
+
+def mark_acknowledged(state: dict, retailer_id: str, at_iso: str) -> int:
+    """When the retailer messages us, treat it as 'I've seen everything you sent'.
+
+    Bumps every active insight's last_sent_iso to `at_iso` so the cooldown clock
+    restarts from THEIR action, not ours. Returns the count of insights touched.
+    """
+    bucket = state.get(retailer_id) or {}
+    touched = 0
+    for name, payload in bucket.items():
+        if isinstance(payload, dict) and payload.get("last_sent_iso"):
+            payload["last_sent_iso"] = at_iso
+            touched += 1
+    return touched

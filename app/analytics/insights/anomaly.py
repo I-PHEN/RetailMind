@@ -36,6 +36,12 @@ def anomaly(df: pd.DataFrame, ctx: dict[str, Any]) -> Insight | None:
     severity = "high" if abs(z) >= Z_HIGH else "warn"
     direction = "spike" if z > 0 else "drop"
     cur = ctx.get("currency", "")
+    # Carry the trailing window (+ spike day) so the chart renderer can plot the line.
+    series_tail = daily.iloc[-(WINDOW + 1):]
+    daily_series = [
+        {"date": str(d), "revenue": round(float(v), 2)}
+        for d, v in series_tail.items()
+    ]
     return Insight(
         title=f"Revenue {direction} detected",
         severity=severity,
@@ -45,6 +51,7 @@ def anomaly(df: pd.DataFrame, ctx: dict[str, Any]) -> Insight | None:
             "expected_avg": round(mean, 2),
             "z_score": round(z, 2),
             "currency": cur,
+            "daily_series": daily_series,
         },
         finding=(
             f"{last_day} revenue {last_rev:,.0f} {cur} is a {direction} "

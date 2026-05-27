@@ -1,10 +1,10 @@
-"""Single LLM entry point — OpenAI-compatible client (OpenRouter by default).
+"""Single LLM entry point — Groq (OpenAI-compatible), one model.
 
-Both the narrator and the agent go through here so the provider/model is one config change.
+Groq runs openai/gpt-oss-120b at ~250–500 tok/s, which makes tool-use loops
+feel instant on WhatsApp. Provider and model live in `app/settings.py`.
 
-Free OpenRouter models get rate-limited upstream without warning. To keep a live demo from
-dying, `chat()` tries the configured model and, on a 429 / provider error, immediately falls
-back to the next free model in the chain rather than waiting or crashing.
+We do one short retry on transient API errors (network blips); upstream
+errors bubble up to the caller so it can show a user-friendly fallback.
 """
 from __future__ import annotations
 
@@ -13,62 +13,50 @@ import time
 from functools import lru_cache
 from typing import Any
 
-from openai import APIError, APIStatusError, OpenAI, RateLimitError
+from openai import APIError, OpenAI
 
 from app.settings import get_settings
 
 log = logging.getLogger("retailmind.llm")
 
-# Free, tool-capable fallbacks (live on OpenRouter as of build). The configured
-# LLM_MODEL is tried first; these are tried in order if it's unavailable.
-FALLBACK_MODELS = [
-    "qwen/qwen3-next-80b-a3b-instruct:free",
-    "openai/gpt-oss-120b:free",
-    "meta-llama/llama-3.3-70b-instruct:free",
-    "z-ai/glm-4.5-air:free",
-    "deepseek/deepseek-v4-flash:free",
-]
-
 
 @lru_cache
 def _client() -> OpenAI:
     s = get_settings()
-    # We handle fallback ourselves; don't let the SDK silently retry the same model.
-    return OpenAI(api_key=s.llm_api_key, base_url=s.llm_base_url, max_retries=0)
+    # gpt-oss-120b is a reasoning model — give it generous headroom even though
+    # Groq is usually <2s, so first-token / cold-cache turns don't time out.
+    return OpenAI(api_key=s.llm_api_key, base_url=s.llm_base_url,
+                  max_retries=0, timeout=60.0)
 
 
 def chat(messages: list[dict[str, Any]], tools: list[dict] | None = None,
-         max_tokens: int = 700) -> Any:
-    """Return a ChatCompletion, transparently failing over across free models."""
+         max_tokens: int = 700, reasoning_effort: str | None = "low") -> Any:
+    """Return a ChatCompletion. Retries once on a transient APIError.
+
+    `reasoning_effort` controls how many internal-reasoning tokens gpt-oss
+    consumes before producing its visible answer. Default "low" keeps fast
+    conversational turns from getting their tool call truncated. Pass
+    `reasoning_effort=None` to let the model decide (defaults to high).
+    """
     s = get_settings()
-    chain: list[str] = [s.llm_model] + [m for m in FALLBACK_MODELS if m != s.llm_model]
+    kwargs: dict[str, Any] = {
+        "model": s.llm_model,
+        "messages": messages,
+        "max_tokens": max_tokens,
+    }
+    if tools:
+        kwargs["tools"] = tools
+    if reasoning_effort and "gpt-oss" in s.llm_model:
+        kwargs["reasoning_effort"] = reasoning_effort
 
     last_err: Exception | None = None
-    for model in chain:
-        kwargs: dict[str, Any] = {
-            "model": model,
-            "messages": messages,
-            "max_tokens": max_tokens,
-            "extra_headers": {"X-Title": "RetailMind"},
-        }
-        if tools:
-            kwargs["tools"] = tools
+    for attempt in (1, 2):
         try:
-            resp = _client().chat.completions.create(**kwargs)
-            if model != s.llm_model:
-                log.warning("LLM fell back to %s (primary unavailable)", model)
-            return resp
-        except (RateLimitError, APIStatusError) as exc:  # 429 / 5xx → try next model
+            return _client().chat.completions.create(**kwargs)
+        except APIError as exc:
             last_err = exc
-            log.warning("model %s unavailable (%s); trying next", model,
-                        getattr(exc, "status_code", "?"))
-            time.sleep(0.5)
-        except APIError as exc:  # transient network/provider error → one quick retry
-            last_err = exc
-            log.warning("model %s API error: %s; trying next", model, exc)
-            time.sleep(0.5)
+            log.warning("LLM call attempt %d failed: %s", attempt, exc)
+            if attempt < 2:
+                time.sleep(0.4)
 
-    raise RuntimeError(
-        f"All free models unavailable right now (last error: {last_err}). "
-        "Retry in a moment or set LLM_MODEL to a different OpenRouter model."
-    )
+    raise RuntimeError(f"LLM call failed after retries: {last_err}")

@@ -17,8 +17,9 @@ from app.scheduler import alert_state as st
 
 log = logging.getLogger("retailmind.alert_policy")
 
-WORSEN_STEP = 0.15            # key must grow >15% over last alerted value to re-alert
-DEFAULT_COOLDOWN_H = 6
+WORSEN_STEP = 0.50            # key must grow >50% over last alerted value to re-alert
+DEFAULT_COOLDOWN_H = 6        # ordinary high-severity alerts
+CRITICAL_COOLDOWN_H = 1       # even critical events get at least this much breathing room
 DEFAULT_QUIET = "21:00-07:00"
 DEFAULT_DIGEST_SUPPRESS_MIN = 90
 _SEV_RANK = {"info": 1, "warn": 2, "high": 3}
@@ -76,6 +77,10 @@ def select_candidates(bundle: dict, retailer: dict, state: dict,
     """Return [(insight, reason)] where reason ∈ {new, worsened, escalated}."""
     rid = retailer["id"]
     now = now or _now_tz(retailer)
+    # Owner explicitly asked for quiet — respect it even for critical events.
+    if st.is_paused(state, rid, now):
+        log.info("alerts paused for %s — no candidates this poll", rid)
+        return []
     cooldown = timedelta(hours=float(retailer.get("alert_cooldown_hours", DEFAULT_COOLDOWN_H)))
     quiet = retailer.get("quiet_hours", DEFAULT_QUIET)
     suppress = timedelta(
@@ -109,15 +114,20 @@ def select_candidates(bundle: dict, retailer: dict, state: dict,
             continue  # already alerted and not materially worse → stay quiet
 
         critical = _is_critical(ins)
+        # Cooldown applies ALWAYS — even critical events get a minimum breathing room
+        # so a single ongoing issue doesn't spam the chat every poll.
+        active_cooldown = (
+            timedelta(hours=CRITICAL_COOLDOWN_H) if critical else cooldown
+        )
+        if prev and prev.get("last_sent_iso"):
+            try:
+                since = now - dateparser.parse(prev["last_sent_iso"])
+                if since < active_cooldown and reason != "escalated":
+                    continue
+            except Exception:
+                pass
+
         if not critical:
-            # Cooldown applies to re-alerts (worsened/escalated of a known insight).
-            if prev and prev.get("last_sent_iso"):
-                try:
-                    since = now - dateparser.parse(prev["last_sent_iso"])
-                    if since < cooldown and reason != "escalated":
-                        continue
-                except Exception:
-                    pass
             # Don't re-ping what the morning digest just covered, unless it worsened.
             if dg_recent and name in dg_names and reason == "new":
                 continue

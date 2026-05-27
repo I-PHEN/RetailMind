@@ -20,6 +20,12 @@ def revenue_trend(df: pd.DataFrame, ctx: dict[str, Any]) -> Insight | None:
     delta_pct = ((last_rev - baseline) / baseline * 100.0) if baseline else 0.0
 
     direction = "above" if delta_pct >= 0 else "below"
+    # Last 30 days for the chart renderer (line + mean overlay).
+    series_tail = daily.iloc[-30:]
+    daily_series = [
+        {"date": str(d), "revenue": round(float(v), 2)}
+        for d, v in series_tail.items()
+    ]
     return Insight(
         title="Latest day revenue",
         severity="info",
@@ -29,6 +35,7 @@ def revenue_trend(df: pd.DataFrame, ctx: dict[str, Any]) -> Insight | None:
             "trailing_avg_30d": round(baseline, 2),
             "delta_pct": round(delta_pct, 1),
             "currency": ctx.get("currency", ""),
+            "daily_series": daily_series,
         },
         finding=(
             f"On {last_day}, revenue was {last_rev:,.0f} {ctx.get('currency','')}, "

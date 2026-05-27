@@ -7,8 +7,13 @@ sees these columns:
     revenue (float), category (str, optional), unit_cost (float, optional)
 
 Add new header spellings to ALIASES here — never special-case columns in connectors.
+Headers are normalized before matching: lowercased, stripped, parenthetical/unit
+suffixes removed, non-alphanum collapsed to single spaces — so "Unit Price (GHS)",
+"unit_price", "Unit-Price [USD]" all match the same alias.
 """
 from __future__ import annotations
+
+import re
 
 import pandas as pd
 from dateutil import parser as dateparser
@@ -29,11 +34,28 @@ ALIASES: dict[str, list[str]] = {
 }
 
 
+_PAREN_OR_BRACKET = re.compile(r"[\(\[\{].*?[\)\]\}]")
+_NON_WORD = re.compile(r"[^a-z0-9]+")
+
+
+def _normalize_header(h: str) -> str:
+    """Lowercase, drop parenthetical/bracketed units (e.g. '(GHS)'), collapse
+    punctuation to single spaces so 'Unit Price (GHS)' -> 'unit price'."""
+    s = _PAREN_OR_BRACKET.sub(" ", str(h)).lower()
+    s = _NON_WORD.sub(" ", s).strip()
+    return s
+
+
 def _build_reverse_map(columns: list[str]) -> dict[str, str]:
     """Map each raw column to a canonical name where we can."""
-    norm = {c: c.strip().lower() for c in columns}
+    norm = {c: _normalize_header(c) for c in columns}
+    # Pre-normalize the alias table once per call so comparison is symmetric.
+    alias_norm = {
+        canon: {_normalize_header(a) for a in names}
+        for canon, names in ALIASES.items()
+    }
     mapping: dict[str, str] = {}
-    for canonical, names in ALIASES.items():
+    for canonical, names in alias_norm.items():
         for raw, low in norm.items():
             if raw in mapping:
                 continue

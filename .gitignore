@@ -31,6 +31,8 @@ trigger_out.json
 cf.out
 cf.log
 uv.log
+uvicorn.err
+*.err
 
 # Worktrees
 .worktrees/

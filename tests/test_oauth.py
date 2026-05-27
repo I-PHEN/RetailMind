@@ -14,7 +14,7 @@ def _mock_settings():
 def test_build_oauth_url_contains_state():
     with patch("app.onboarding.oauth.get_settings", return_value=_mock_settings()):
         from app.onboarding.oauth import build_oauth_url
-        url, state_token = build_oauth_url("+2348012345678")
+        url, state_token, _ = build_oauth_url("+2348012345678")
         assert "accounts.google.com" in url
         assert state_token in url
         assert len(state_token) == 32  # 16 bytes hex
@@ -23,17 +23,28 @@ def test_build_oauth_url_contains_state():
 def test_build_oauth_url_has_sheets_and_drive_file_scopes():
     with patch("app.onboarding.oauth.get_settings", return_value=_mock_settings()):
         from app.onboarding.oauth import build_oauth_url
-        url, _ = build_oauth_url("+2348012345678")
+        url, _, _ = build_oauth_url("+2348012345678")
         assert "spreadsheets.readonly" in url
         assert "drive.file" in url
 
 
-def test_state_token_is_unique():
+def test_build_oauth_url_includes_pkce_challenge():
+    """PKCE: auth URL must carry a code_challenge derived from our verifier."""
     with patch("app.onboarding.oauth.get_settings", return_value=_mock_settings()):
         from app.onboarding.oauth import build_oauth_url
-        _, t1 = build_oauth_url("+234...")
-        _, t2 = build_oauth_url("+234...")
+        url, _, verifier = build_oauth_url("+2348012345678")
+        assert verifier  # non-empty
+        assert "code_challenge" in url
+        assert "code_challenge_method=S256" in url
+
+
+def test_state_token_and_verifier_are_unique_per_call():
+    with patch("app.onboarding.oauth.get_settings", return_value=_mock_settings()):
+        from app.onboarding.oauth import build_oauth_url
+        _, t1, v1 = build_oauth_url("+234...")
+        _, t2, v2 = build_oauth_url("+234...")
         assert t1 != t2
+        assert v1 != v2
 
 
 def _fake_tokens():
@@ -51,6 +62,7 @@ def _fake_state_row():
             "name": "Amina",
             "shop_name": "Amina's Mini-Mart",
             "oauth_state_token": "tok123",
+            "oauth_code_verifier": "the-pkce-verifier",
             "timezone": "Africa/Lagos",
             "currency": "NGN",
         },
@@ -63,12 +75,15 @@ def test_handle_oauth_callback_advances_to_awaiting_sheet_pick():
         MagicMock(data=[_fake_state_row()])
     sb.table.return_value.upsert.return_value.execute.return_value = MagicMock()
 
-    with patch("app.onboarding.oauth.exchange_code", return_value=_fake_tokens()), \
+    with patch("app.onboarding.oauth.exchange_code",
+               return_value=_fake_tokens()) as mock_exchange, \
          patch("app.onboarding.oauth._get_supabase", return_value=sb):
         from app.onboarding.oauth import handle_oauth_callback
         whatsapp, access_token = handle_oauth_callback(code="x", state_token="tok123")
         assert whatsapp == "+2348012345678"
         assert access_token == "acc"
+        # PKCE: must forward the saved code_verifier to exchange_code
+        mock_exchange.assert_called_once_with("x", code_verifier="the-pkce-verifier")
         upsert_payload = sb.table.return_value.upsert.call_args[0][0]
         assert upsert_payload["step"] == "awaiting_sheet_pick"
         assert upsert_payload["data"]["google_token"]["access_token"] == "acc"

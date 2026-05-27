@@ -36,6 +36,24 @@ def health() -> dict:
     return {"status": "ok", "retailers": [r["id"] for r in all_retailers()]}
 
 
+@app.get("/go/{token}")
+def short_redirect(token: str):
+    """Map a short token to the full OAuth URL stored in onboarding_state."""
+    from fastapi.responses import RedirectResponse
+    from app.onboarding.fsm import _get_supabase
+    sb = _get_supabase()
+    if sb is None:
+        raise HTTPException(503, "state store unavailable")
+    resp = sb.table("onboarding_state").select("*") \
+            .filter("data->>short_token", "eq", token).execute()
+    if not resp.data:
+        raise HTTPException(404, "link expired")
+    url = (resp.data[0].get("data") or {}).get("oauth_auth_url")
+    if not url:
+        raise HTTPException(404, "link missing destination")
+    return RedirectResponse(url, status_code=302)
+
+
 _PICKER_HTML = """<!doctype html>
 <html><head><meta charset="utf-8"><title>Pick your sales sheet</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">

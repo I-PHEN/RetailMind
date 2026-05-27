@@ -18,6 +18,10 @@ def to_whatsapp(text: str) -> str:
     # Horizontal rules / stray table pipes
     text = re.sub(r"(?m)^\s*([-*_]\s*){3,}$", "", text)
     text = re.sub(r"(?m)^\s*\|.*\|\s*$", "", text)
+    # Normalize bullet markers ("- foo", "* foo") to "• foo".
+    # Skip lines where the asterisk is acting as bold (e.g. "*Group title*").
+    text = re.sub(r"(?m)^(\s*)-\s+", r"\1• ", text)
+    text = re.sub(r"(?m)^(\s*)\*\s+(?!.*\*\s*$)", r"\1• ", text)
     # Tidy trailing spaces, collapse 3+ blank lines
     text = re.sub(r"[ \t]+(\n)", r"\1", text)
     text = re.sub(r"\n{3,}", "\n\n", text)

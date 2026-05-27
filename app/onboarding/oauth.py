@@ -47,26 +47,40 @@ def _flow() -> Flow:
     )
 
 
-def build_oauth_url(whatsapp: str) -> tuple[str, str]:
-    """Return (authorization_url, state_token).
+def build_oauth_url(whatsapp: str) -> tuple[str, str, str]:
+    """Return (authorization_url, state_token, code_verifier).
 
     state_token is a 32-char hex string the caller must store in onboarding_state.data
     so the redirect handler can recover which WhatsApp number is completing OAuth.
+
+    code_verifier is the PKCE secret. Google's OAuth requires PKCE for this client,
+    so the same verifier must be passed back to `exchange_code` after the redirect.
     """
     state_token = secrets.token_hex(16)
-    auth_url, _ = _flow().authorization_url(
+    # PKCE: generate our own verifier so we can persist it across the redirect.
+    # 43–128 url-safe chars per RFC 7636; 64 bytes -> ~86 chars.
+    code_verifier = secrets.token_urlsafe(64)
+    flow = _flow()
+    flow.code_verifier = code_verifier  # makes authorization_url emit a code_challenge
+    auth_url, _ = flow.authorization_url(
         access_type="offline",
         include_granted_scopes="true",
         state=state_token,
         prompt="consent",
     )
-    return auth_url, state_token
+    return auth_url, state_token, code_verifier
 
 
-def exchange_code(code: str) -> dict[str, Any]:
-    """Exchange an authorization code for tokens. Returns a dict with token data."""
+def exchange_code(code: str, code_verifier: str | None = None) -> dict[str, Any]:
+    """Exchange an authorization code for tokens. Returns a dict with token data.
+
+    `code_verifier` must match the value used when the auth URL was built
+    (Google rejects the exchange with InvalidGrantError otherwise).
+    """
     s = get_settings()
     flow = _flow()
+    if code_verifier:
+        flow.code_verifier = code_verifier
     flow.fetch_token(code=code)
     creds = flow.credentials
     return {
@@ -114,9 +128,10 @@ def handle_oauth_callback(code: str, state_token: str) -> tuple[str, str]:
     Returns (whatsapp, access_token) — the access_token is handed to the picker
     page's JS so the Google Picker widget can authenticate as the user.
     """
-    tokens = exchange_code(code)
     row = _row_by_token(state_token)
     whatsapp = row["whatsapp"]
+    verifier = (row.get("data") or {}).get("oauth_code_verifier")
+    tokens = exchange_code(code, code_verifier=verifier)
     data = {**row["data"], "google_token": tokens}
 
     sb = _get_supabase()
@@ -151,6 +166,7 @@ def finalize_with_sheet(state_token: str, spreadsheet_id: str) -> dict[str, Any]
     retailer = create_retailer({
         "id": retailer_id,
         "name": shop_name,
+        "owner_name": name,
         "whatsapp": whatsapp,
         "currency": currency,
         "timezone": timezone,
